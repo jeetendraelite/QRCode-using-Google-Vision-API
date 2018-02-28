@@ -1,4 +1,4 @@
-package vision.google.com.qrcodescanner;
+package com.jituscanner;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;
@@ -21,6 +21,6 @@ public class ExampleInstrumentedTest {
         // Context of the app under test.
         Context appContext = InstrumentationRegistry.getTargetContext();
 
-        assertEquals("vision.google.com.qrcodescanner", appContext.getPackageName());
+        assertEquals("com.jituscanner", appContext.getPackageName());
     }
 }

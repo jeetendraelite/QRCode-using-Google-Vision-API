@@ -1,6 +1,5 @@
-package vision.google.com.qrcodescanner;
+package com.jituscanner;
 
-import android.*;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -19,6 +18,8 @@ import com.google.android.gms.vision.barcode.BarcodeDetector;
 
 import java.io.IOException;
 
+import com.jituscanner.R;
+
 public class ScanActivity extends AppCompatActivity {
     SurfaceView cameraView;
     BarcodeDetector barcode;
@@ -27,7 +28,7 @@ public class ScanActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_scan);
+        setContentView(com.jituscanner.R.layout.activity_scan);
         cameraView = (SurfaceView) findViewById(R.id.cameraView);
         cameraView.setZOrderMediaOverlay(true);
         holder = cameraView.getHolder();
@@ -80,6 +81,8 @@ public class ScanActivity extends AppCompatActivity {
                     Intent intent = new Intent();
                     intent.putExtra("barcode", barcodes.valueAt(0));
                     setResult(RESULT_OK, intent);
+
+                   // cameraSource.stop();
                     finish();
                 }
             }

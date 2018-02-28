@@ -4,7 +4,7 @@ android {
     compileSdkVersion 25
     buildToolsVersion "25.0.2"
     defaultConfig {
-        applicationId "vision.google.com.qrcodescanner"
+        applicationId "com.jituscanner"
         minSdkVersion 19
         targetSdkVersion 25
         versionCode 1
@@ -31,4 +31,8 @@ dependencies {
     compile 'com.google.android.gms:play-services:10.0.1'
 
     testCompile 'junit:junit:4.12'
+}
+dependencies {
+    compile 'com.android.support:design:25.+'
+    compile 'com.android.support.constraint:constraint-layout:+'
 }

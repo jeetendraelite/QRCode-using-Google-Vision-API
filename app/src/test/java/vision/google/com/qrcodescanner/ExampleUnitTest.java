@@ -1,4 +1,4 @@
-package vision.google.com.qrcodescanner;
+package com.jituscanner;
 
 import org.junit.Test;
 
