@@ -54,7 +54,9 @@ public class MainActivity extends BaseActivity {
 
 
 
-                Details details =   new Details("aaa","aaa","aaaa");
+                Details details =   new Details("JITU","34343434","ab@gm.com","image path",
+                        "details here","09:24","airport ahmedabad","Elite Info World",
+                        "899898989898","http:google.com","5454545454545","contact");
 
 
                 insertData(details);
@@ -101,7 +103,14 @@ public class MainActivity extends BaseActivity {
                                 "Id: " + cn.getId() +
                                 "Name: " + cn.getName() +
                                 "Phone: " + cn.getPhone_number()+
-                                "email: " + cn.getEmail()
+                                "email: " + cn.getEmail()+
+                                "img: " + cn.getImg()+
+                                "detail: " + cn.getDetail()+
+                                "time: " + cn.getTime()+
+                                "address: " + cn.getAddress()+
+                                "organization: " + cn.getOrganization()+
+                                "cell: " + cn.getCell()+
+                                "URL: " + cn.getURL()
                         ;
 
                 Log.i("Reading : ",log);
@@ -126,14 +135,15 @@ public class MainActivity extends BaseActivity {
                         +"\n \n Raw values"+ barcode.rawValue);
 
 
-                        Details details =   new Details(barcode.displayValue,"123456",barcode.rawValue);
+                        //Details details =   new Details(barcode.displayValue,"123456",barcode.rawValue);
+                       // Details details =   new Details();
 
                         /*if(barcode.rawValue.contains("VCARD"))
                         {
                             details
                         }
                       */
-                        insertData(details);
+                       // insertData(details);
 
                         // insert to table
                        // phone.setText(barcode.phone);
