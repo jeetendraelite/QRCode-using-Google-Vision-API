@@ -25,6 +25,7 @@ public class ScanActivity extends AppCompatActivity {
     BarcodeDetector barcode;
     CameraSource cameraSource;
     SurfaceHolder holder;
+    SurfaceHolder.Callback mSurfaceHolderCallback;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -39,21 +40,19 @@ public class ScanActivity extends AppCompatActivity {
             Toast.makeText(getApplicationContext(), "Sorry, Couldn't setup the detector", Toast.LENGTH_LONG).show();
             this.finish();
         }
-        cameraSource = new CameraSource.Builder(this, barcode)
-                .setFacing(CameraSource.CAMERA_FACING_BACK)
-                .setRequestedFps(24)
-                .setAutoFocusEnabled(true)
-                .setRequestedPreviewSize(1920,1024)
-                .build();
-        cameraView.getHolder().addCallback(new SurfaceHolder.Callback() {
+
+
+         mSurfaceHolderCallback =  new SurfaceHolder.Callback() {
             @Override
             public void surfaceCreated(SurfaceHolder holder) {
                 try{
                     if(ContextCompat.checkSelfPermission(ScanActivity.this, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED){
+
                         cameraSource.start(cameraView.getHolder());
+
                     }
                 }
-                catch (IOException e){
+                catch (Exception e){
                     e.printStackTrace();
                 }
             }
@@ -67,7 +66,17 @@ public class ScanActivity extends AppCompatActivity {
             public void surfaceDestroyed(SurfaceHolder holder) {
 
             }
-        });
+        };
+
+        releaseCameraAndPreview();
+
+        cameraSource = new CameraSource.Builder(this, barcode)
+                .setFacing(CameraSource.CAMERA_FACING_BACK)
+                .setRequestedFps(24)
+                .setAutoFocusEnabled(true)
+                .setRequestedPreviewSize(1920,1024)
+                .build();
+        cameraView.getHolder().addCallback(mSurfaceHolderCallback);
         barcode.setProcessor(new Detector.Processor<Barcode>() {
             @Override
             public void release() {
@@ -80,12 +89,38 @@ public class ScanActivity extends AppCompatActivity {
                 if(barcodes.size() > 0){
                     Intent intent = new Intent();
                     intent.putExtra("barcode", barcodes.valueAt(0));
-                    setResult(RESULT_OK, intent);
 
-                   // cameraSource.stop();
+                    setResult(RESULT_OK, intent);
                     finish();
                 }
             }
         });
     }
+
+    private void releaseCameraAndPreview() {
+        if (cameraSource != null) {
+            //cameraView.setPreviewCallback(null);
+            cameraView.getHolder().removeCallback(mSurfaceHolderCallback);
+            cameraSource.release();
+            cameraSource = null;
+        }
+    }
+
+   /* @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (cameraSource != null) {
+            cameraSource.release();
+            cameraSource = null;
+        }
+        if (cameraView !=null) {
+            cameraView = null;
+        }
+
+        barcode = null;
+        holder = null;
+    }*/
+
+
+
 }

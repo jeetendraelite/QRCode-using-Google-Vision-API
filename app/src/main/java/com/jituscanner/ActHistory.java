@@ -1,29 +1,68 @@
 package com.jituscanner;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.text.Html;
+import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.ListAdapter;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.cjj.MaterialRefreshLayout;
 import com.google.android.gms.vision.barcode.Barcode;
+import com.jituscanner.utils.DatabaseHandler;
+import com.jituscanner.utils.Details;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
 public class ActHistory extends BaseActivity {
-    Button scanbtn;
-    TextView result,phone;
-    public static final int REQUEST_CODE = 100;
-    public static final int PERMISSION_REQUEST = 200;
+    DatabaseHandler db;
+
+    List<Details> listDetails = new ArrayList<>();
+
+
+
+    @BindView(R.id.recyclerView)
+    RecyclerView recyclerView;
+
+    @BindView(R.id.materialRefreshLayout)
+    MaterialRefreshLayout materialRefreshLayout;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
       //  setContentView(com.jituscanner.R.layout.activity_main);
 
-        ViewGroup.inflate(this, R.layout.activity_main, rlBaseMain);
+
+        try{
+
+
+
+
+        ViewGroup.inflate(this, R.layout.activity_history, rlBaseMain);
+
+            ButterKnife.bind(this);
+
+            db = new DatabaseHandler(this);
 
         // for the base
         fab.setVisibility(View.VISIBLE);
@@ -32,47 +71,154 @@ public class ActHistory extends BaseActivity {
             public void onClick(View view) {
                 Intent intent = new Intent(ActHistory.this,MainActivity.class);
                 startActivity(intent);
+
+
             }
         });
 
+        getScannerHistory();
 
-        // get from table
+        //setadapter
 
-        scanbtn = (Button) findViewById(R.id.scanbtn);
-        result = (TextView) findViewById(R.id.result);
-     //   phone = (TextView) findViewById(R.id.phone);
-        if(ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED){
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA}, PERMISSION_REQUEST);
+            iniatialize();
+
+          //  setClickEvents();
+
+            setAdapterData();
+            // for the listing
+
+        }catch (Exception e){
+            e.printStackTrace();
         }
-        scanbtn.performClick();
-        scanbtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(ActHistory.this, ScanActivity.class);
-                startActivityForResult(intent, REQUEST_CODE);
-            }
-        });
+
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if(requestCode == REQUEST_CODE && resultCode == RESULT_OK){
-            if(data != null){
-                final Barcode barcode = data.getParcelableExtra("barcode");
-                result.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        result.setText(barcode.displayValue
-                        +"\n \n Raw values"+
-                                        barcode.rawValue
+    private void setAdapterData() {
+        try {
+
+            //arrayListAllDoctorListModel = StaticDataList.getDoctorList();
+           // List<Details> listDetails = new ArrayList<>();
+            ListAdapter listAdapter = new ListAdapter(this, listDetails);
+
+            recyclerView.setAdapter(listAdapter);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    public class ListAdapter extends RecyclerView.Adapter<ListAdapter.VersionViewHolder> {
+        List<Details> listDetails;
+        Context mContext;
 
 
-                        );
+        public ListAdapter(Context context, List<Details> arrayListFollowers) {
+            listDetails = arrayListFollowers;
+            mContext = context;
+        }
 
-                       // phone.setText(barcode.phone);
-                    }
-                });
+        @Override
+        public VersionViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
+            View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.row_history_list, viewGroup, false);
+            VersionViewHolder viewHolder = new VersionViewHolder(view);
+            return viewHolder;
+        }
+
+
+        @SuppressLint("ResourceAsColor")
+        @Override
+        public void onBindViewHolder(final VersionViewHolder versionViewHolder, final int i) {
+            try {
+                Details mDetail=  listDetails.get(i);
+
+                versionViewHolder.tvtype.setText(mDetail.getType());
+                versionViewHolder.tvdetail.setText(mDetail.getDetail());
+                if(mDetail.getType().equalsIgnoreCase("contact")){
+                    versionViewHolder.img.setImageResource(R.drawable.ic_perm_contact_calendar_black_24dp);
+                }
+
+
+
+
+            } catch (Exception e) {
+                e.printStackTrace();
             }
         }
+
+        @Override
+        public int getItemCount() {
+            return listDetails.size();
+        }
+
+
+        class VersionViewHolder extends RecyclerView.ViewHolder {
+
+            TextView tvtype, tvdetail;
+
+            RelativeLayout rlMainLay;
+            ImageView img;
+
+
+            public VersionViewHolder(View itemView) {
+                super(itemView);
+
+                rlMainLay = (RelativeLayout) itemView.findViewById(R.id.rlMainLay);
+
+
+                img = (ImageView) itemView.findViewById(R.id.img);
+                tvtype = (TextView) itemView.findViewById(R.id.tvtype);
+                tvdetail = (TextView) itemView.findViewById(R.id.tvdetail);
+
+
+
+            }
+
+        }
     }
+
+    private void iniatialize() {
+        try{
+            materialRefreshLayout.setIsOverLay(true);
+            materialRefreshLayout.setWaveShow(true);
+            materialRefreshLayout.setWaveColor(0x55ffffff);
+
+            materialRefreshLayout.setLoadMore(false); // enable if pagination
+
+            LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
+            recyclerView.setLayoutManager(linearLayoutManager);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
+    }
+
+
+    private void getScannerHistory() {
+        try {
+            // Reading all contacts
+            Log.d("Reading: ", "Reading all Details..");
+            listDetails = db.getAllDetails();
+
+            for (Details cn : listDetails) {
+                String log =
+                        "Id: " + cn.getId() +
+                                "Name: " + cn.getName() +
+                                "Phone: " + cn.getPhone_number() +
+                                "email: " + cn.getEmail() +
+                                "img: " + cn.getImg() +
+                                "detail: " + cn.getDetail() +
+                                "time: " + cn.getTime() +
+                                "address: " + cn.getAddress() +
+                                "organization: " + cn.getOrganization() +
+                                "cell: " + cn.getCell() +
+                                "URL: " + cn.getURL();
+
+                Log.i("Reading : ", log);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+
 }

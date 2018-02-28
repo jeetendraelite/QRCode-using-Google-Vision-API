@@ -19,19 +19,25 @@ import com.jituscanner.R;
 import com.jituscanner.utils.DatabaseHandler;
 import com.jituscanner.utils.Details;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 public class MainActivity extends BaseActivity {
     Button scanbtn;
-    TextView result,phone;
+    TextView result, phone;
     public static final int REQUEST_CODE = 100;
     public static final int PERMISSION_REQUEST = 200;
-    DatabaseHandler db ;
+    DatabaseHandler db;
+    
+    String rawValues = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-      //  setContentView(com.jituscanner.R.layout.activity_main);
+        //  setContentView(com.jituscanner.R.layout.activity_main);
 
         ViewGroup.inflate(this, R.layout.activity_main, rlBaseMain);
 
@@ -41,25 +47,16 @@ public class MainActivity extends BaseActivity {
 
         db = new DatabaseHandler(this);
 
-     //   phone = (TextView) findViewById(R.id.phone);
-        if(ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED){
+        //   phone = (TextView) findViewById(R.id.phone);
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA}, PERMISSION_REQUEST);
         }
 
         scanbtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-               /* Intent intent = new Intent(MainActivity.this, ScanActivity.class);
-                startActivityForResult(intent, REQUEST_CODE);*/
-
-
-
-                Details details =   new Details("JITU","34343434","ab@gm.com","image path",
-                        "details here","09:24","airport ahmedabad","Elite Info World",
-                        "899898989898","http:google.com","5454545454545","contact");
-
-
-                insertData(details);
+                Intent intent = new Intent(MainActivity.this, ScanActivity.class);
+                startActivityForResult(intent, REQUEST_CODE);
 
 
             }
@@ -75,78 +72,179 @@ public class MainActivity extends BaseActivity {
     }
 
 
-    private void insertData(Details details)
-    {
-        try{
+    private void insertData(Details details) {
+        try {
             Log.d("Insert: ", "Inserting ..");
 
             db.addDetails(details);
-           // db.addDetails(new Details("Raj","8989","xyz@gm.com"));
-            //db.addDetails(new Details("Kiran","89863","kiran@gm.com"));
 
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    private void getScannerHistory()
-    {
-        try{
+    private void getScannerHistory() {
+        try {
             // Reading all contacts
             Log.d("Reading: ", "Reading all Details..");
             List<Details> details = db.getAllDetails();
 
             for (Details cn : details) {
                 String log =
-                                "Id: " + cn.getId() +
+                        "Id: " + cn.getId() +
                                 "Name: " + cn.getName() +
-                                "Phone: " + cn.getPhone_number()+
-                                "email: " + cn.getEmail()+
-                                "img: " + cn.getImg()+
-                                "detail: " + cn.getDetail()+
-                                "time: " + cn.getTime()+
-                                "address: " + cn.getAddress()+
-                                "organization: " + cn.getOrganization()+
-                                "cell: " + cn.getCell()+
-                                "URL: " + cn.getURL()
-                        ;
+                                "Phone: " + cn.getPhone_number() +
+                                "email: " + cn.getEmail() +
+                                "img: " + cn.getImg() +
+                                "detail: " + cn.getDetail() +
+                                "time: " + cn.getTime() +
+                                "address: " + cn.getAddress() +
+                                "organization: " + cn.getOrganization() +
+                                "cell: " + cn.getCell() +
+                                "URL: " + cn.getURL();
 
-                Log.i("Reading : ",log);
+                Log.i("Reading : ", log);
             }
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if(requestCode == REQUEST_CODE && resultCode == RESULT_OK){
+        if (requestCode == REQUEST_CODE && resultCode == RESULT_OK) {
 
-            if(data != null){
+            if (data != null) {
                 final Barcode barcode = data.getParcelableExtra("barcode");
                 result.post(new Runnable() {
                     @Override
                     public void run() {
                         result.setText(barcode.displayValue
-                        +"\n \n Raw values"+ barcode.rawValue);
-
-
-                        //Details details =   new Details(barcode.displayValue,"123456",barcode.rawValue);
-                       // Details details =   new Details();
-
-                        /*if(barcode.rawValue.contains("VCARD"))
+                                + "\n \n Raw values" + barcode.rawValue);
+                        
+                        if(barcode.rawValue !=null)
                         {
-                            details
+                            rawValues = barcode.rawValue;
                         }
-                      */
-                       // insertData(details);
+
+
+                        Details details = new Details("", "", "", "",
+                                "", "", "", "",
+                                "", "", "", "");
+
+
+                        if (rawValues.contains("VCARD")) {
+                            details.setType("Contact");
+                            details.setDetail(rawValues);
+                        } else if (rawValues.contains("http")) {
+                            details.setType("Weblink");
+                            details.setDetail(barcode.displayValue);
+                        } else {
+                            details.setType("Data");
+                            details.setDetail(barcode.displayValue);
+                        }
+
+
+                        Calendar c = Calendar.getInstance();
+                        System.out.println("Current time => " + c.getTime());
+
+                        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                        String formattedDate = df.format(c.getTime());
+
+                        details.setTime(formattedDate);
+
+
+// for the contact detail
+
+                        if(barcode.contactInfo !=null)
+                        {
+                            Barcode.ContactInfo contactInfo = barcode.contactInfo;
+                            if (contactInfo != null)
+                            {
+                                if(contactInfo.name !=null)
+                                {
+                                    details.setName(contactInfo.name.first + " "+ contactInfo.name.last);
+                                }
+                                if(contactInfo.phones !=null)
+                                {
+
+                                    int UNKNOWN = 0;
+                                    int WORK = 1;
+                                    int HOME = 2;
+                                    int FAX = 3;
+                                    int MOBILE = 4;
+
+
+                                    if(contactInfo.phones.length > UNKNOWN)
+                                        details.setPhone_number(""+contactInfo.phones[UNKNOWN].number);
+
+                                    if(contactInfo.phones.length > WORK)
+                                        details.setPhone_number(""+contactInfo.phones[WORK].number);
+
+                                    if(contactInfo.phones.length > HOME)
+                                        details.setPhone_number(""+contactInfo.phones[HOME].number);
+
+                                    if(contactInfo.phones.length > MOBILE)
+                                        details.setPhone_number(""+contactInfo.phones[MOBILE].number);
+
+                                    if(contactInfo.phones.length > FAX)
+                                        details.setFax(""+contactInfo.phones[FAX]);
+
+                                }
+
+                                if(contactInfo.addresses !=null)
+                                {
+                                    int UNKNOWN = 0;
+                                    int WORK = 1;
+                                    int HOME = 2;
+
+                                    if(contactInfo.addresses.length > UNKNOWN && contactInfo.addresses[UNKNOWN].addressLines.length > 0)
+                                        details.setAddress(""+contactInfo.addresses[UNKNOWN].addressLines[0].toString());
+
+                                    if(contactInfo.addresses.length > WORK && contactInfo.addresses[WORK].addressLines.length > 0)
+                                        details.setAddress(""+contactInfo.addresses[WORK].addressLines[0].toString());
+
+                                    if(contactInfo.addresses.length > HOME && contactInfo.addresses[HOME].addressLines.length > 0)
+                                        details.setAddress(""+contactInfo.addresses[HOME].addressLines[0].toString());
+                                }
+
+                                if(contactInfo.emails !=null)
+                                {
+                                    int UNKNOWN = 0;
+                                    int WORK = 1;
+                                    int HOME = 2;
+
+                                    if(contactInfo.emails.length > UNKNOWN)
+                                        details.setEmail(""+contactInfo.emails[UNKNOWN].address.toString());
+
+                                    if(contactInfo.emails.length > WORK)
+                                        details.setEmail(""+contactInfo.emails[WORK].address.toString());
+
+                                    if(contactInfo.emails.length > HOME)
+                                        details.setEmail(""+contactInfo.emails[HOME].address.toString());
+                                }
+
+                                if(contactInfo.organization !=null)
+                                {
+                                    details.setOrganization(contactInfo.organization);
+                                }
+                                if(contactInfo.urls !=null)
+                                {
+                                    if(contactInfo.urls.length > 0)
+                                     details.setURL(contactInfo.urls[0]);
+
+                                    if(contactInfo.urls.length > 1)
+                                     details.setURL(contactInfo.urls[1]);
+                                }
+                            }
+                        }
+                        
+                        
+
+                        insertData(details);
 
                         // insert to table
-                       // phone.setText(barcode.phone);
+                        // phone.setText(barcode.phone);
                     }
                 });
             }

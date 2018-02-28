@@ -16,7 +16,7 @@ import java.util.List;
 public class DatabaseHandler extends SQLiteOpenHelper {
 
     // Database Version
-    private static final int DATABASE_VERSION = 2;
+    private static final int DATABASE_VERSION = 3;
 
 
     // Database Name
@@ -59,15 +59,15 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                 + KEY_NAME + " TEXT,"
                 + KEY_PH_NO + " TEXT,"
                 + KEY_EMAIL + " TEXT,"
-                + KEY_ADDRESS  + " TEXT, "
-                + KEY_TIME  + " TEXT, "
-                + KEY_DETAIL  + " TEXT, "
-                + KEY_ORGANIZATION + " TEXT, "
-                + KEY_CELL + " TEXT, "
-                + KEY_URL + " TEXT, "
-                + KEY_IMG + " TEXT, "
-                + KEY_FAX + " TEXT, "
-                +KEY_TYPE + " TEXT, " + ")";
+                + KEY_ADDRESS  + " TEXT,"
+                + KEY_TIME  + " TEXT,"
+                + KEY_DETAIL  + " TEXT,"
+                + KEY_ORGANIZATION + " TEXT,"
+                + KEY_CELL + " TEXT,"
+                + KEY_URL + " TEXT,"
+                + KEY_IMG + " TEXT,"
+                + KEY_FAX + " TEXT,"
+                +KEY_TYPE + " TEXT" + ")";
 
 
 
@@ -144,19 +144,19 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         if (cursor.moveToFirst()) {
             do {
                 Details details = new Details();
-                details.setId(Integer.parseInt(cursor.getString(0)));
-                details.setName(cursor.getString(1));
-                details.setPhone_number(cursor.getString(2));
-                details.setEmail(cursor.getString(3));
-                details.setImg(cursor.getString(4));
-                details.setDetail(cursor.getString(5));
-                details.setTime(cursor.getString(6));
-                details.setAddress(cursor.getString(7));
-                details.setOrganization(cursor.getString(8));
-                details.setCell(cursor.getString(9));
-                details.setURL(cursor.getString(10));
-                details.setFax(cursor.getString(11));
-                details.setType(cursor.getString(12));
+                details.setId(Integer.parseInt(cursor.getString(cursor.getColumnIndex(KEY_ID))));
+                details.setName(cursor.getString(cursor.getColumnIndex(KEY_NAME)));
+                details.setPhone_number(cursor.getString(cursor.getColumnIndex(KEY_PH_NO)));
+                details.setEmail(cursor.getString(cursor.getColumnIndex(KEY_EMAIL)));
+                details.setImg(cursor.getString(cursor.getColumnIndex(KEY_IMG)));
+                details.setDetail(cursor.getString(cursor.getColumnIndex(KEY_DETAIL)));
+                details.setTime(cursor.getString(cursor.getColumnIndex(KEY_TIME)));
+                details.setAddress(cursor.getString(cursor.getColumnIndex(KEY_ADDRESS)));
+                details.setOrganization(cursor.getString(cursor.getColumnIndex(KEY_ORGANIZATION)));
+                details.setCell(cursor.getString(cursor.getColumnIndex(KEY_CELL)));
+                details.setURL(cursor.getString(cursor.getColumnIndex(KEY_URL)));
+                details.setFax(cursor.getString(cursor.getColumnIndex(KEY_FAX)));
+                details.setType(cursor.getString(cursor.getColumnIndex(KEY_TYPE)));
                 // Adding details to list
                 detailsArrayList.add(details);
             } while (cursor.moveToNext());
