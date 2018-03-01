@@ -1,10 +1,12 @@
 package com.jituscanner.utils;
 
+import java.io.Serializable;
+
 /**
  * Created by jeetendra.achtani on 28-02-2018.
  */
 
-public class Details {
+public class Details implements Serializable {
 
     int id;
     String name;

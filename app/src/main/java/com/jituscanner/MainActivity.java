@@ -233,8 +233,8 @@ public class MainActivity extends BaseActivity {
                                     if(contactInfo.urls.length > 0)
                                      details.setURL(contactInfo.urls[0]);
 
-                                    if(contactInfo.urls.length > 1)
-                                     details.setURL(contactInfo.urls[1]);
+                                   /* if(contactInfo.urls.length > 1)
+                                     details.setURL(contactInfo.urls[1]);*/
                                 }
                             }
                         }

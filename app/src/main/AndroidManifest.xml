@@ -24,11 +24,11 @@
         </activity>
         <activity android:name=".ActHistory" />
         <activity android:name=".ScanActivity" />
-
         <activity
             android:name=".BaseActivity"
             android:label="@string/title_activity_base"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".ActDetails"></activity>
     </application>
 
 </manifest>

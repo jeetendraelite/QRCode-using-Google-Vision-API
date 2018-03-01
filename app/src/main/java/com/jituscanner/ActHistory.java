@@ -27,6 +27,7 @@ import com.google.android.gms.vision.barcode.Barcode;
 import com.jituscanner.utils.DatabaseHandler;
 import com.jituscanner.utils.Details;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -39,7 +40,6 @@ public class ActHistory extends BaseActivity {
     List<Details> listDetails = new ArrayList<>();
 
 
-
     @BindView(R.id.recyclerView)
     RecyclerView recyclerView;
 
@@ -50,44 +50,42 @@ public class ActHistory extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-      //  setContentView(com.jituscanner.R.layout.activity_main);
+        //  setContentView(com.jituscanner.R.layout.activity_main);
 
 
-        try{
+        try {
 
 
-
-
-        ViewGroup.inflate(this, R.layout.activity_history, rlBaseMain);
+            ViewGroup.inflate(this, R.layout.activity_history, rlBaseMain);
 
             ButterKnife.bind(this);
 
             db = new DatabaseHandler(this);
 
-        // for the base
-        fab.setVisibility(View.VISIBLE);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(ActHistory.this,MainActivity.class);
-                startActivity(intent);
+            // for the base
+            fab.setVisibility(View.VISIBLE);
+            fab.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent intent = new Intent(ActHistory.this, MainActivity.class);
+                    startActivity(intent);
 
 
-            }
-        });
+                }
+            });
 
-        getScannerHistory();
+            getScannerHistory();
 
-        //setadapter
+            //setadapter
 
             iniatialize();
 
-          //  setClickEvents();
+            //  setClickEvents();
 
             setAdapterData();
             // for the listing
 
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
@@ -97,7 +95,7 @@ public class ActHistory extends BaseActivity {
         try {
 
             //arrayListAllDoctorListModel = StaticDataList.getDoctorList();
-           // List<Details> listDetails = new ArrayList<>();
+            // List<Details> listDetails = new ArrayList<>();
             ListAdapter listAdapter = new ListAdapter(this, listDetails);
 
             recyclerView.setAdapter(listAdapter);
@@ -129,15 +127,37 @@ public class ActHistory extends BaseActivity {
         @Override
         public void onBindViewHolder(final VersionViewHolder versionViewHolder, final int i) {
             try {
-                Details mDetail=  listDetails.get(i);
+                final Details mDetail = listDetails.get(i);
 
                 versionViewHolder.tvtype.setText(mDetail.getType());
-                versionViewHolder.tvdetail.setText(mDetail.getDetail());
-                if(mDetail.getType().equalsIgnoreCase("contact")){
-                    versionViewHolder.img.setImageResource(R.drawable.ic_perm_contact_calendar_black_24dp);
+               // versionViewHolder.tvdetail.setText(mDetail.getDetail());
+
+
+                if (mDetail.getType().equalsIgnoreCase("Weblink")) {
+                    versionViewHolder.tvdetail.setText(mDetail.getDetail());
+                }
+
+                if (mDetail.getType().equalsIgnoreCase("Contact")) {
+                    versionViewHolder.tvdetail.setText(mDetail.getName() + "\n" + mDetail.getCell() + "\n" + mDetail.getEmail());
                 }
 
 
+               // versionViewHolder.tvdetail.setText(mDetail.getName() + "\n" + mDetail.getCell() + "\n" + mDetail.getEmail());
+
+
+                if (mDetail.getType().equalsIgnoreCase("contact")) {
+                    versionViewHolder.img.setImageResource(R.drawable.ic_perm_contact_calendar_black_24dp);
+                }
+
+                versionViewHolder.rlMainLay.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Intent intent = new Intent(ActHistory.this, ActDetails.class);
+
+                        intent.putExtra("ActHistory", listDetails.get(i));
+                        startActivity(intent);
+                    }
+                });
 
 
             } catch (Exception e) {
@@ -170,14 +190,13 @@ public class ActHistory extends BaseActivity {
                 tvdetail = (TextView) itemView.findViewById(R.id.tvdetail);
 
 
-
             }
 
         }
     }
 
     private void iniatialize() {
-        try{
+        try {
             materialRefreshLayout.setIsOverLay(true);
             materialRefreshLayout.setWaveShow(true);
             materialRefreshLayout.setWaveColor(0x55ffffff);
@@ -186,7 +205,7 @@ public class ActHistory extends BaseActivity {
 
             LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
             recyclerView.setLayoutManager(linearLayoutManager);
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
 

@@ -47,7 +47,7 @@
             android:layout_below="@+id/tvtype"
             android:layout_marginLeft="15dp"
             android:ellipsize="end"
-            android:maxLines="1"
+            android:maxLines="5"
             android:layout_toRightOf="@+id/img"
             android:layout_marginTop="5dp"
             android:text="Text title"
