@@ -1,12 +1,12 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 25
-    buildToolsVersion "25.0.2"
+    compileSdkVersion 27
+    buildToolsVersion "27.0.0"
     defaultConfig {
         applicationId "com.jituscanner"
         minSdkVersion 19
-        targetSdkVersion 25
+        targetSdkVersion 27
         versionCode 1
         versionName "1.0"
         multiDexEnabled true
@@ -21,6 +21,7 @@ android {
 }
 dependencies {
     compile 'com.android.support:multidex:1.0.1'
+
 }
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
@@ -28,7 +29,8 @@ dependencies {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
     compile 'com.android.support:appcompat-v7:25.0.1'
-    compile 'com.google.android.gms:play-services:10.0.1'
+
+    compile 'com.google.android.gms:play-services-vision:11.8.0'
 
     testCompile 'junit:junit:4.12'
 }
