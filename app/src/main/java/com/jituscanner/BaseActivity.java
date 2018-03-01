@@ -102,11 +102,7 @@ public class BaseActivity extends AppCompatActivity
         } else if (id == R.id.nav_history) {
             Intent intent = new Intent(BaseActivity.this,ActHistory.class);
             startActivity(intent);
-        } else if (id == R.id.nav_slideshow) {
-
-        } else if (id == R.id.nav_manage) {
-
-        } else if (id == R.id.nav_share) {
+        }  else if (id == R.id.nav_share) {
 
         } else if (id == R.id.nav_send) {
 
