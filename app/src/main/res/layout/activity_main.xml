@@ -17,7 +17,10 @@
         android:text="SCAN"
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"/>
-
+   <ImageView
+       android:layout_width="wrap_content"
+       android:id="@+id/iv_barcode_image"
+       android:layout_height="wrap_content" />
 
     <android.support.v4.widget.NestedScrollView
         android:layout_width="match_parent"
@@ -37,5 +40,8 @@
         android:padding="5dp"
         android:text="Detail - "
         android:gravity="center_horizontal"/>
+
+
+          />
     </android.support.v4.widget.NestedScrollView>
 </RelativeLayout>

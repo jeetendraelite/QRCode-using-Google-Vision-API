@@ -2,6 +2,7 @@ package com.jituscanner.utils;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
@@ -162,8 +163,21 @@ public class DatabaseHandler extends SQLiteOpenHelper {
             } while (cursor.moveToNext());
         }
 
+
+
         // return details list
         return detailsArrayList;
+    }
+    // Deleting single contact
+    public void deleteContact(int ContactID) {
+        try{
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.delete(TABLE_DETAILS, KEY_ID + " = ?",
+                new String[]{String.valueOf(ContactID)});
+        db.close();
+    }catch (Exception e){
+            e.printStackTrace();
+        }
     }
 
 }

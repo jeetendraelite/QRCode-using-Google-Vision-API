@@ -23,6 +23,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.cjj.MaterialRefreshLayout;
+import com.cjj.MaterialRefreshListener;
 import com.google.android.gms.vision.barcode.Barcode;
 import com.jituscanner.utils.DatabaseHandler;
 import com.jituscanner.utils.Details;
@@ -45,6 +46,8 @@ public class ActHistory extends BaseActivity {
 
     @BindView(R.id.materialRefreshLayout)
     MaterialRefreshLayout materialRefreshLayout;
+
+    ListAdapter listAdapter;
 
 
     @Override
@@ -74,15 +77,14 @@ public class ActHistory extends BaseActivity {
                 }
             });
 
-            getScannerHistory();
+
 
             //setadapter
 
             iniatialize();
+            getScannerHistory();
 
-            //  setClickEvents();
 
-            setAdapterData();
             // for the listing
 
         } catch (Exception e) {
@@ -96,7 +98,7 @@ public class ActHistory extends BaseActivity {
 
             //arrayListAllDoctorListModel = StaticDataList.getDoctorList();
             // List<Details> listDetails = new ArrayList<>();
-            ListAdapter listAdapter = new ListAdapter(this, listDetails);
+             listAdapter = new ListAdapter(this, listDetails);
 
             recyclerView.setAdapter(listAdapter);
         } catch (Exception e) {
@@ -129,7 +131,7 @@ public class ActHistory extends BaseActivity {
             try {
                 final Details mDetail = listDetails.get(i);
 
-                versionViewHolder.tvtype.setText(mDetail.getType());
+                versionViewHolder.tvtype.setText(i+"# "+mDetail.getType());
                // versionViewHolder.tvdetail.setText(mDetail.getDetail());
 
 
@@ -159,6 +161,22 @@ public class ActHistory extends BaseActivity {
                     }
                 });
 
+                versionViewHolder.ivDelete.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        try {
+
+                            Log.i("click", "i =" + i);
+
+                            db.deleteContact(listDetails.get(i).getId());
+                            listDetails.remove(i);
+                            listAdapter.notifyDataSetChanged();
+                        }catch (Exception e){
+                            e.printStackTrace();
+                        }
+                    }
+                });
+
 
             } catch (Exception e) {
                 e.printStackTrace();
@@ -176,7 +194,7 @@ public class ActHistory extends BaseActivity {
             TextView tvtype, tvdetail;
 
             RelativeLayout rlMainLay;
-            ImageView img;
+            ImageView img,ivDelete;
 
 
             public VersionViewHolder(View itemView) {
@@ -188,7 +206,7 @@ public class ActHistory extends BaseActivity {
                 img = (ImageView) itemView.findViewById(R.id.img);
                 tvtype = (TextView) itemView.findViewById(R.id.tvtype);
                 tvdetail = (TextView) itemView.findViewById(R.id.tvdetail);
-
+                ivDelete=(ImageView)itemView.findViewById(R.id.iv_delete);
 
             }
 
@@ -202,6 +220,32 @@ public class ActHistory extends BaseActivity {
             materialRefreshLayout.setWaveColor(0x55ffffff);
 
             materialRefreshLayout.setLoadMore(false); // enable if pagination
+
+            materialRefreshLayout.setMaterialRefreshListener(new MaterialRefreshListener() {
+                                                                 @Override
+                                                                 public void onRefresh(final MaterialRefreshLayout materialRefreshLayout) {
+                                                                     //refreshing...
+
+                                                                     getScannerHistory();
+
+                                                                     // refresh complete
+                                                                     materialRefreshLayout.finishRefresh();
+
+// load more refresh complete
+                                                                     materialRefreshLayout.finishRefreshLoadMore();
+                                                                 }
+
+                                                                 @Override
+                                                                 public void onRefreshLoadMore(MaterialRefreshLayout materialRefreshLayout) {
+                                                                     //load more refreshing...
+
+                                                                     // refresh complete
+                                                                     materialRefreshLayout.finishRefresh();
+
+// load more refresh complete
+                                                                     materialRefreshLayout.finishRefreshLoadMore();
+                                                                 }
+                                                             });
 
             LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
             recyclerView.setLayoutManager(linearLayoutManager);
@@ -233,6 +277,10 @@ public class ActHistory extends BaseActivity {
                                 "URL: " + cn.getURL();
 
                 Log.i("Reading : ", log);
+            }
+
+            if(listDetails!= null){
+                setAdapterData();
             }
         } catch (Exception e) {
             e.printStackTrace();

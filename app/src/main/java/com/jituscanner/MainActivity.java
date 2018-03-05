@@ -12,6 +12,7 @@ import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.google.android.gms.vision.barcode.Barcode;
@@ -27,8 +28,9 @@ import java.util.Date;
 import java.util.List;
 
 public class MainActivity extends BaseActivity {
-    Button scanbtn;
+    Button scanbtn,btn_delete;
     TextView result, phone;
+    ImageView iv_barcode_image;
     public static final int REQUEST_CODE = 100;
     public static final int PERMISSION_REQUEST = 200;
     DatabaseHandler db;
@@ -44,7 +46,9 @@ public class MainActivity extends BaseActivity {
 
 
         scanbtn = (Button) findViewById(R.id.scanbtn);
+       // btn_delete = (Button) findViewById(R.id.btn_delete);
         result = (TextView) findViewById(R.id.result);
+        iv_barcode_image = (ImageView) findViewById(R.id.iv_barcode_image);
 
         db = new DatabaseHandler(this);
 
@@ -70,6 +74,8 @@ public class MainActivity extends BaseActivity {
                 return false;
             }
         });
+
+
             // Experiment method
 
 
@@ -82,6 +88,22 @@ public class MainActivity extends BaseActivity {
             Log.d("Insert: ", "Inserting ..");
 
             db.addDetails(details);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    private void DeleteData(Details details) {
+        try {
+            Log.d("Delete: ", "Deleting ..");
+
+            btn_delete.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                }
+            });
+
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -133,7 +155,7 @@ public class MainActivity extends BaseActivity {
                         }
 
 
-                        Details details = new Details("", "", "", "",
+                        final Details details = new Details("", "", "", "",
                                 "", "", "", "",
                                 "", "", "", "");
 
@@ -149,7 +171,7 @@ public class MainActivity extends BaseActivity {
                             details.setDetail(barcode.displayValue);
                         }
 
-
+                        //iv_barcode_image.setImageResource();
                         Calendar c = Calendar.getInstance();
                         System.out.println("Current time => " + c.getTime());
 
@@ -244,8 +266,7 @@ public class MainActivity extends BaseActivity {
                             }
                         }
                         
-                        
-
+                       DeleteData(details);
                         insertData(details);
 
                         // insert to table
