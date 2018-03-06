@@ -128,7 +128,9 @@ public class MainActivity extends BaseActivity {
                                 "address: " + cn.getAddress() +
                                 "organization: " + cn.getOrganization() +
                                 "cell: " + cn.getCell() +
-                                "URL: " + cn.getURL();
+                                "URL: " + cn.getURL()+
+                                "SMSMESSAGE: " + cn.getSMSMESSAGE()+
+                                "SMSPHONENO: " +cn.getSMSPHONENO();
 
                 Log.i("Reading : ", log);
             }
@@ -157,7 +159,7 @@ public class MainActivity extends BaseActivity {
 
                         final Details details = new Details("", "", "", "",
                                 "", "", "", "",
-                                "", "", "", "");
+                                "", "", "", "","","");
 
 
                         if (rawValues.contains("VCARD")) {
@@ -168,10 +170,10 @@ public class MainActivity extends BaseActivity {
                             details.setDetail(barcode.displayValue);
                         } else if(rawValues.contains("SMSTO")){
                             details.setType("SMS");
-                            details.setDetail(barcode.displayValue);
-                        }else if(rawValues.contains("matmsg")){
+                            details.setDetail(rawValues);
+                        }else if(rawValues.contains("MATMSG")){
                             details.setType("EMAIL");
-                            details.setDetail(barcode.displayValue);
+                            details.setDetail(rawValues);
                         }else if(rawValues.contains("tel")){
                             Log.d("phone number",barcode.displayValue);
                             details.setType("Phone Number");
@@ -198,6 +200,7 @@ public class MainActivity extends BaseActivity {
                             Barcode.ContactInfo contactInfo = barcode.contactInfo;
                             if (contactInfo != null)
                             {
+
                                 if(contactInfo.name !=null)
                                 {
                                     details.setName(contactInfo.name.first + " "+ contactInfo.name.last);
@@ -273,10 +276,26 @@ public class MainActivity extends BaseActivity {
                                    /* if(contactInfo.urls.length > 1)
                                      details.setURL(contactInfo.urls[1]);*/
                                 }
+
                             }
                         }
+
+                        if(barcode.sms != null){
+                            Barcode.Sms sms = barcode.sms;
+                            if(barcode.sms!=null){
+                                details.setSMSMESSAGE(sms.message);
+                                details.setSMSPHONENO(sms.phoneNumber);
+                            }
+                        }
+                        if(barcode.email != null){
+                            Barcode.Email email = barcode.email;
+                                details.setEMAIL_TO(email.address);
+                                details.setEMAIL_SUB(email.subject);
+                                details.setEMAIL_BODY(email.body);
+
+                        }
                         
-                       DeleteData(details);
+                      // DeleteData(details);
                         insertData(details);
 
                         // insert to table

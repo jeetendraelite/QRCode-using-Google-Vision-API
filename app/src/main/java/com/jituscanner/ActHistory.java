@@ -134,25 +134,33 @@ public class ActHistory extends BaseActivity {
                 // versionViewHolder.tvdetail.setText(mDetail.getDetail());
 
 
-                if (mDetail.getType().equalsIgnoreCase("Weblink")) {
+              /*  if (mDetail.getType().equalsIgnoreCase("Weblink")) {
                     versionViewHolder.tvdetail.setText(mDetail.getDetail());
                 }
-                if (mDetail.getType().equalsIgnoreCase("email")) {
+               else  if (mDetail.getType().equalsIgnoreCase("email")) {
                     versionViewHolder.tvdetail.setText(mDetail.getDetail());
                 }
-                if (mDetail.getType().equalsIgnoreCase("SMS")) {
+               else if (mDetail.getType().equalsIgnoreCase("SMS")) {
                     versionViewHolder.tvdetail.setText(mDetail.getDetail());
                 }
-                if (mDetail.getType().equalsIgnoreCase("data")) {
+               else if (mDetail.getType().equalsIgnoreCase("data")) {
                     versionViewHolder.tvdetail.setText(mDetail.getDetail());
                 }
-                if (mDetail.getType().equalsIgnoreCase("Phone Number")) {
+               else if (mDetail.getType().equalsIgnoreCase("Phone Number")) {
                     versionViewHolder.tvdetail.setText(mDetail.getDetail());
                 }
-                if (mDetail.getType().equalsIgnoreCase("Contact")) {
+              else*/
+
+                  if (mDetail.getType().equalsIgnoreCase("Contact")) {
                     versionViewHolder.tvdetail.setText(mDetail.getName() + "\n" + mDetail.getCell() + "\n" + mDetail.getEmail()
                             + "\n" + mDetail.getOrganization());
                 }
+                  else if (mDetail.getType().equalsIgnoreCase("EMAIL")) {
+                      versionViewHolder.tvdetail.setText(mDetail.getEMAIL_TO() + "\n" + mDetail.getEMAIL_SUB() + "\n" + mDetail.getEMAIL_BODY()
+                           );
+                  }else{
+                      versionViewHolder.tvdetail.setText(mDetail.getDetail());
+                  }
 
 
                 // versionViewHolder.tvdetail.setText(mDetail.getName() + "\n" + mDetail.getCell() + "\n" + mDetail.getEmail());
@@ -161,16 +169,19 @@ public class ActHistory extends BaseActivity {
                 if (mDetail.getType().equalsIgnoreCase("contact")) {
                     versionViewHolder.img.setImageResource(R.drawable.ic_perm_contact_calendar_black_24dp);
                 }
-                if (mDetail.getType().equalsIgnoreCase("Weblink")) {
+                else if (mDetail.getType().equalsIgnoreCase("Weblink")) {
                     versionViewHolder.img.setImageResource(R.drawable.ic_weblink_black_24dp);
                 }
-                if (mDetail.getType().equalsIgnoreCase("Phone Number")) {
+               else if (mDetail.getType().equalsIgnoreCase("Phone Number")) {
                     versionViewHolder.img.setImageResource(R.drawable.ic_phone_black_24dp);
                 }
-                if (mDetail.getType().equalsIgnoreCase("SMS")) {
+                else if (mDetail.getType().equalsIgnoreCase("SMS")) {
                     versionViewHolder.img.setImageResource(R.drawable.ic_sms_black_24dp);
                 }
-                if (mDetail.getType().equalsIgnoreCase("data")) {
+                else if (mDetail.getType().equalsIgnoreCase("EMAIL")) {
+                    versionViewHolder.img.setImageResource(R.drawable.ic_email_black_24dp);
+                }
+                else if (mDetail.getType().equalsIgnoreCase("data")) {
                     versionViewHolder.img.setImageResource(R.drawable.ic_datausage_usage_black_24dp);
                 }
 
@@ -288,6 +299,7 @@ public class ActHistory extends BaseActivity {
             for (Details cn : listDetails) {
                 String log =
                         "Id: " + cn.getId() +
+                                "Type: " + cn.getType() +
                                 "Name: " + cn.getName() +
                                 "Phone: " + cn.getPhone_number() +
                                 "email: " + cn.getEmail() +
@@ -297,7 +309,9 @@ public class ActHistory extends BaseActivity {
                                 "address: " + cn.getAddress() +
                                 "organization: " + cn.getOrganization() +
                                 "cell: " + cn.getCell() +
-                                "URL: " + cn.getURL();
+                                "URL: " + cn.getURL()+
+                                "SENDSMS: "+ cn.getSMSMESSAGE()+
+                                "SMSPHONENO: "+ cn.getSMSPHONENO();
 
                 Log.i("Reading : ", log);
             }

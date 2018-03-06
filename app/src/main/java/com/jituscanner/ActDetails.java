@@ -34,6 +34,9 @@ public class ActDetails extends BaseActivity {
     @BindView(R.id.btn_addContacts)
     Button btn_addContacts;
 
+ @BindView(R.id.btn_sendsms)
+    Button btn_sendsms;
+
     @BindView(R.id.dial)
     Button dial;
 
@@ -52,6 +55,7 @@ public class ActDetails extends BaseActivity {
         ButterKnife.bind(this);
         dial.setVisibility(View.GONE);
         btn_addContacts.setVisibility(View.GONE);
+        btn_sendsms.setVisibility(View.GONE);
 
         Bundle b = getIntent().getExtras();
         if (b != null) {
@@ -70,8 +74,7 @@ public class ActDetails extends BaseActivity {
             if (details.getType().equalsIgnoreCase("sms")) {
 
                 tv_detail.setText(details.getDetail());
-                dial.setVisibility(View.VISIBLE);
-                btn_addContacts.setVisibility(View.VISIBLE);
+              btn_sendsms.setVisibility(View.VISIBLE);
             }
             if (details.getType().equalsIgnoreCase("email")) {
                 tv_detail.setText(details.getDetail());
@@ -84,6 +87,22 @@ public class ActDetails extends BaseActivity {
             }
 
         }
+        btn_sendsms.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String message = details.getSMSMESSAGE();
+                String phoneNo = details.getSMSPHONENO();
+
+                if(!TextUtils.isEmpty(message) && !TextUtils.isEmpty(phoneNo)) {
+                    Intent smsIntent = new Intent(Intent.ACTION_SENDTO, Uri.parse("smsto:" + phoneNo));
+                    smsIntent.putExtra("sms_body", message);
+                    startActivity(smsIntent);
+                }
+
+
+
+            }
+        });
         btn_addContacts.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

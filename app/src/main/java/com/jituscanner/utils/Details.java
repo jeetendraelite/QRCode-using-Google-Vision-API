@@ -19,6 +19,45 @@ public class Details implements Serializable {
     String organization;
     String cell;
     String URL;
+    String SMSMESSAGE;
+
+    String SMSPHONENO;
+    String EMAIL_TO;
+    String EMAIL_SUB;
+    String EMAIL_BODY;
+
+    public String getEMAIL_TO() {
+        return EMAIL_TO;
+    }
+
+    public void setEMAIL_TO(String EMAIL_TO) {
+        this.EMAIL_TO = EMAIL_TO;
+    }
+
+    public String getEMAIL_SUB() {
+        return EMAIL_SUB;
+    }
+
+    public void setEMAIL_SUB(String EMAIL_SUB) {
+        this.EMAIL_SUB = EMAIL_SUB;
+    }
+
+    public String getEMAIL_BODY() {
+        return EMAIL_BODY;
+    }
+
+    public void setEMAIL_BODY(String EMAIL_BODY) {
+        this.EMAIL_BODY = EMAIL_BODY;
+    }
+
+    public String getSMSPHONENO() {
+        return SMSPHONENO;
+    }
+
+    public void setSMSPHONENO(String SMSPHONENO) {
+        this.SMSPHONENO = SMSPHONENO;
+    }
+
 
     public String getType() {
         return type;
@@ -103,6 +142,14 @@ public class Details implements Serializable {
         this.id = id;
     }
 
+    public String getSMSMESSAGE() {
+        return SMSMESSAGE;
+    }
+
+    public void setSMSMESSAGE(String SMSMESSAGE) {
+        this.SMSMESSAGE = SMSMESSAGE;
+    }
+
     public String getName() {
         return name;
     }
@@ -132,7 +179,7 @@ public class Details implements Serializable {
 
     }
     public Details(int id, String name, String _phone_number,String email,String img,String detail,String time,String address,String
-            organization,String cell,String URL,String FAX,String type){
+            organization,String cell,String URL,String FAX,String type,String SMSMESSAGE,String SMSPHONENO,String EMAIL_TO,String EMAIL_SUB,String EMAIL_BODY){
         this.id = id;
         this.name = name;
         this.phone_number = _phone_number;
@@ -146,10 +193,14 @@ public class Details implements Serializable {
         this.URL  = URL;
         this.Fax  = FAX;
         this.type  = type;
+        this.SMSMESSAGE  = SMSMESSAGE;
+        this.SMSPHONENO  = SMSPHONENO;
+        this.EMAIL_TO  = EMAIL_TO;
+        this.SMSPHONENO  = SMSPHONENO;
     }
 
     public Details( String name, String _phone_number,String email,String img,String detail,String time,String address,String
-            organization,String cell,String URL,String FAX,String type){
+            organization,String cell,String URL,String FAX,String type,String SMSMESSAGE,String SMSPHONENO){
         this.name = name;
         this.phone_number = _phone_number;
         this.email  = email;
@@ -162,6 +213,9 @@ public class Details implements Serializable {
         this.URL  = URL;
         this.Fax  = FAX;
         this.type  = type;
+        this.SMSMESSAGE  = SMSMESSAGE;
+        this.SMSPHONENO  = SMSPHONENO;
+    }
     }
 
-}
+

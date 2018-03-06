@@ -30,5 +30,12 @@
         android:layout_centerInParent="true"
         android:text="Call a number"
         android:layout_below="@+id/btn_addContacts"/>
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/btn_sendsms"
+        android:layout_centerInParent="true"
+        android:text="Send an SMS"
+        android:layout_below="@+id/dial"/>
 
 </RelativeLayout>
