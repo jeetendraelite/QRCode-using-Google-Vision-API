@@ -25,6 +25,7 @@ import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import de.cketti.mailto.EmailIntentBuilder;
 
 public class ActDetails extends BaseActivity {
 
@@ -34,11 +35,13 @@ public class ActDetails extends BaseActivity {
     @BindView(R.id.btn_addContacts)
     Button btn_addContacts;
 
- @BindView(R.id.btn_sendsms)
+    @BindView(R.id.btn_sendsms)
     Button btn_sendsms;
 
     @BindView(R.id.dial)
     Button dial;
+    @BindView(R.id.btn_sendemail)
+    Button btn_sendemail;
 
     Details details = null;
 
@@ -56,6 +59,7 @@ public class ActDetails extends BaseActivity {
         dial.setVisibility(View.GONE);
         btn_addContacts.setVisibility(View.GONE);
         btn_sendsms.setVisibility(View.GONE);
+        btn_sendemail.setVisibility(View.GONE);
 
         Bundle b = getIntent().getExtras();
         if (b != null) {
@@ -66,7 +70,7 @@ public class ActDetails extends BaseActivity {
                 tv_detail.setText(details.getDetail());
             }
             if (details.getType().equalsIgnoreCase("contact")) {
-                tv_detail.setText(details.getName() + "\n" + details.getCell() + "\n"+ details.getPhone_number() + "\n" + details.getEmail() + "\n"
+                tv_detail.setText(details.getName() + "\n" + details.getCell() + "\n" + details.getPhone_number() + "\n" + details.getEmail() + "\n"
                         + details.getOrganization());
                 dial.setVisibility(View.VISIBLE);
                 btn_addContacts.setVisibility(View.VISIBLE);
@@ -74,15 +78,18 @@ public class ActDetails extends BaseActivity {
             if (details.getType().equalsIgnoreCase("sms")) {
 
                 tv_detail.setText(details.getDetail());
-              btn_sendsms.setVisibility(View.VISIBLE);
+                btn_sendsms.setVisibility(View.VISIBLE);
             }
             if (details.getType().equalsIgnoreCase("email")) {
                 tv_detail.setText(details.getDetail());
-            }if (details.getType().equalsIgnoreCase("Phone Number")) {
+                btn_sendemail.setVisibility(View.VISIBLE);
+            }
+            if (details.getType().equalsIgnoreCase("Phone Number")) {
                 tv_detail.setText(details.getDetail());
                 dial.setVisibility(View.VISIBLE);
                 btn_addContacts.setVisibility(View.VISIBLE);
-            }if (details.getType().equalsIgnoreCase("data")) {
+            }
+            if (details.getType().equalsIgnoreCase("data")) {
                 tv_detail.setText(details.getDetail());
             }
 
@@ -93,12 +100,11 @@ public class ActDetails extends BaseActivity {
                 String message = details.getSMSMESSAGE();
                 String phoneNo = details.getSMSPHONENO();
 
-                if(!TextUtils.isEmpty(message) && !TextUtils.isEmpty(phoneNo)) {
+                if (!TextUtils.isEmpty(message) && !TextUtils.isEmpty(phoneNo)) {
                     Intent smsIntent = new Intent(Intent.ACTION_SENDTO, Uri.parse("smsto:" + phoneNo));
                     smsIntent.putExtra("sms_body", message);
                     startActivity(smsIntent);
                 }
-
 
 
             }
@@ -181,20 +187,18 @@ public class ActDetails extends BaseActivity {
             public void onClick(View v) {
                 Intent callIntent = new Intent(Intent.ACTION_CALL);
                 //String callaNumber=details.getCell().trim();
-                String callaNumber="";
+                String callaNumber = "";
 
-                if(details.getPhone_number() !=null && details.getPhone_number().length() > 1)
-                {
+                if (details.getPhone_number() != null && details.getPhone_number().length() > 1) {
                     callaNumber = details.getPhone_number();
-                    Log.d("phone Number",details.getPhone_number());
+                    Log.d("phone Number", details.getPhone_number());
                 }
-                if(details.getCell() !=null && details.getCell().length() > 1)
-                {
+                if (details.getCell() != null && details.getCell().length() > 1) {
                     callaNumber = details.getCell();
-                    Log.d("cell Number",details.getCell());
+                    Log.d("cell Number", details.getCell());
                 }
-                callIntent.setData(Uri.parse("tel:"+callaNumber));
-               // callIntent.setData(Uri.parse("tel:91-000-000-0000")); // this is working
+                callIntent.setData(Uri.parse("tel:" + callaNumber));
+                // callIntent.setData(Uri.parse("tel:91-000-000-0000")); // this is working
                 if (ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
                     // TODO: Consider calling
                     //    ActivityCompat#requestPermissions
@@ -206,16 +210,31 @@ public class ActDetails extends BaseActivity {
                     return;
                 }
                 startActivity(callIntent);
-
-
-
-
-
-
-
             }
 
         });
+
+        btn_sendemail.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String TO = details.getEMAIL_TO();
+                String Sub = details.getEMAIL_SUB();
+                String Message_Body = details.getEMAIL_BODY();
+
+                String[] addresses={TO};
+
+                Intent intent = new Intent(Intent.ACTION_SEND);
+                intent.setType("*/*");
+                intent.putExtra(Intent.EXTRA_EMAIL, addresses);
+                intent.putExtra(Intent.EXTRA_SUBJECT, Sub);
+                intent.putExtra(Intent.EXTRA_STREAM, Message_Body);
+                intent.putExtra(Intent.EXTRA_TEXT, Message_Body);
+                if (intent.resolveActivity(getPackageManager()) != null) {
+                    startActivity(intent);
+                }
+            }
+        });
+
 
 
     }
@@ -223,7 +242,6 @@ public class ActDetails extends BaseActivity {
     private boolean checkPermission(String permission) {
         return ContextCompat.checkSelfPermission(this, permission) == PackageManager.PERMISSION_GRANTED;
     }
-
 
 
     @Override
@@ -254,9 +272,6 @@ public class ActDetails extends BaseActivity {
             // permissions this app might request
         }
     }
-
-
-
 
 
 }
