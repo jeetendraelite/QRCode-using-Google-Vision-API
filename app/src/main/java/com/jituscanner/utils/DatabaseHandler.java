@@ -149,13 +149,13 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         db.close(); // Closing database connection
     }
 
-    /*// Getting(Reading single contact
+    // Getting(Reading single contact
     public Details getDetails(int id) {
         SQLiteDatabase db = this.getReadableDatabase();
 
         Cursor cursor = db.query(TABLE_DETAILS, new String[] { KEY_ID,
                         KEY_NAME, KEY_PH_NO,KEY_EMAIL,KEY_ADDRESS,KEY_TIME,KEY_DETAIL,KEY_ORGANIZATION,KEY_CELL,
-                KEY_URL,KEY_IMG,KEY_FAX,KEY_TYPE,KEY_SMSSEND}, KEY_ID + "=?",
+                KEY_URL,KEY_IMG,KEY_FAX,KEY_TYPE,KEY_SMSSEND,KEY_EMAIL_TO,KEY_EMAIL_SUB,KEY_EMAIL_BODY}, KEY_ID + "=?",
                 new String[] { String.valueOf(id) }, null, null, null, null);
         if (cursor != null)
             cursor.moveToFirst();
@@ -163,11 +163,12 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         Details details = new Details(Integer.parseInt(cursor.getString(0)),cursor.getString(1),cursor.getString(2),
                 cursor.getString(3),cursor.getString(4),cursor.getString(5),cursor.getString(6),
                 cursor.getString(7),cursor.getString(8),cursor.getString(9),cursor.getString(10),cursor.getString(11),
-                cursor.getString(12),cursor.getString(13),cursor.getString(14));
+                cursor.getString(12),cursor.getString(13),cursor.getString(14),
+                cursor.getString(15),cursor.getString(16),cursor.getString(17));
 
         // return contact
         return details;
-    }*/
+    }
 
     // Getting All Details
     public List<Details> getAllDetails() {

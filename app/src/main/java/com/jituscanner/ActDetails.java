@@ -113,7 +113,7 @@ public class ActDetails extends BaseActivity {
             @Override
             public void onClick(View v) {
 
-               AddContact();
+                AddContact();
             }
         });
         dial.setOnClickListener(new View.OnClickListener() {
@@ -155,7 +155,7 @@ public class ActDetails extends BaseActivity {
                 String Sub = details.getEMAIL_SUB();
                 String Message_Body = details.getEMAIL_BODY();
 
-                String[] addresses={TO};
+                String[] addresses = {TO};
 
                 Intent intent = new Intent(Intent.ACTION_SEND);
                 intent.setType("*/*");
@@ -170,10 +170,9 @@ public class ActDetails extends BaseActivity {
         });
 
 
-
     }
 
-    public  void AddContact(){
+    public void AddContact() {
         ops.add(ContentProviderOperation.newInsert(
                 ContactsContract.RawContacts.CONTENT_URI)
                 .withValue(ContactsContract.RawContacts.ACCOUNT_TYPE, null)
@@ -241,12 +240,11 @@ public class ActDetails extends BaseActivity {
             Log.d("TAG", e.getMessage());
         }
 
-    }
-    private boolean checkPermission(String permission) {
-        return ContextCompat.checkSelfPermission(this, permission) == PackageManager.PERMISSION_GRANTED;
-    }
+        ActivityCompat.requestPermissions(ActDetails.this,
+                new String[]{Manifest.permission.WRITE_CONTACTS,Manifest.permission.CALL_PHONE},
+                1);
 
-
+    }
     @Override
     public void onRequestPermissionsResult(int requestCode,
                                            String permissions[], int[] grantResults) {
@@ -259,7 +257,6 @@ public class ActDetails extends BaseActivity {
 
                     // permission was granted, yay! Do the
                     // contacts-related task you need to do.
-                    Toast.makeText(this, "Permission Granted", Toast.LENGTH_SHORT).show();
                 } else {
 
                     // permission denied, boo! Disable the
@@ -267,14 +264,14 @@ public class ActDetails extends BaseActivity {
                     Toast.makeText(ActDetails.this, "Permission denied", Toast.LENGTH_SHORT).show();
                 }
                 return;
-
             }
-
 
             // other 'case' lines to check for other
             // permissions this app might request
         }
     }
 
-
 }
+
+
+

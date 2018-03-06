@@ -311,7 +311,10 @@ public class ActHistory extends BaseActivity {
                                 "cell: " + cn.getCell() +
                                 "URL: " + cn.getURL()+
                                 "SENDSMS: "+ cn.getSMSMESSAGE()+
-                                "SMSPHONENO: "+ cn.getSMSPHONENO();
+                                "SMSPHONENO: "+ cn.getSMSPHONENO()+
+                        "EMAIL_TO"+ cn.getEMAIL_TO()+
+                        "EMAIL_SUB"+ cn.getEMAIL_SUB()+
+                        "EMAIL_BODY"+ cn.getEMAIL_BODY();
 
                 Log.i("Reading : ", log);
             }

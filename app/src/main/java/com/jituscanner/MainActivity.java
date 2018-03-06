@@ -130,7 +130,9 @@ public class MainActivity extends BaseActivity {
                                 "cell: " + cn.getCell() +
                                 "URL: " + cn.getURL()+
                                 "SMSMESSAGE: " + cn.getSMSMESSAGE()+
-                                "SMSPHONENO: " +cn.getSMSPHONENO();
+                                "SMSPHONENO: " +cn.getSMSPHONENO()
+
+                        ;
 
                 Log.i("Reading : ", log);
             }
