@@ -78,7 +78,6 @@ public class ActHistory extends BaseActivity {
             });
 
 
-
             //setadapter
 
             iniatialize();
@@ -98,7 +97,7 @@ public class ActHistory extends BaseActivity {
 
             //arrayListAllDoctorListModel = StaticDataList.getDoctorList();
             // List<Details> listDetails = new ArrayList<>();
-             listAdapter = new ListAdapter(this, listDetails);
+            listAdapter = new ListAdapter(this, listDetails);
 
             recyclerView.setAdapter(listAdapter);
         } catch (Exception e) {
@@ -131,24 +130,48 @@ public class ActHistory extends BaseActivity {
             try {
                 final Details mDetail = listDetails.get(i);
 
-                versionViewHolder.tvtype.setText(i+"# "+mDetail.getType());
-               // versionViewHolder.tvdetail.setText(mDetail.getDetail());
+                versionViewHolder.tvtype.setText(i + "# " + mDetail.getType());
+                // versionViewHolder.tvdetail.setText(mDetail.getDetail());
 
 
                 if (mDetail.getType().equalsIgnoreCase("Weblink")) {
                     versionViewHolder.tvdetail.setText(mDetail.getDetail());
                 }
-
+                if (mDetail.getType().equalsIgnoreCase("email")) {
+                    versionViewHolder.tvdetail.setText(mDetail.getDetail());
+                }
+                if (mDetail.getType().equalsIgnoreCase("SMS")) {
+                    versionViewHolder.tvdetail.setText(mDetail.getDetail());
+                }
+                if (mDetail.getType().equalsIgnoreCase("data")) {
+                    versionViewHolder.tvdetail.setText(mDetail.getDetail());
+                }
+                if (mDetail.getType().equalsIgnoreCase("Phone Number")) {
+                    versionViewHolder.tvdetail.setText(mDetail.getDetail());
+                }
                 if (mDetail.getType().equalsIgnoreCase("Contact")) {
-                    versionViewHolder.tvdetail.setText(mDetail.getName() + "\n" + mDetail.getCell() + "\n" + mDetail.getEmail());
+                    versionViewHolder.tvdetail.setText(mDetail.getName() + "\n" + mDetail.getCell() + "\n" + mDetail.getEmail()
+                            + "\n" + mDetail.getOrganization());
                 }
 
 
-               // versionViewHolder.tvdetail.setText(mDetail.getName() + "\n" + mDetail.getCell() + "\n" + mDetail.getEmail());
+                // versionViewHolder.tvdetail.setText(mDetail.getName() + "\n" + mDetail.getCell() + "\n" + mDetail.getEmail());
 
 
                 if (mDetail.getType().equalsIgnoreCase("contact")) {
                     versionViewHolder.img.setImageResource(R.drawable.ic_perm_contact_calendar_black_24dp);
+                }
+                if (mDetail.getType().equalsIgnoreCase("Weblink")) {
+                    versionViewHolder.img.setImageResource(R.drawable.ic_weblink_black_24dp);
+                }
+                if (mDetail.getType().equalsIgnoreCase("Phone Number")) {
+                    versionViewHolder.img.setImageResource(R.drawable.ic_phone_black_24dp);
+                }
+                if (mDetail.getType().equalsIgnoreCase("SMS")) {
+                    versionViewHolder.img.setImageResource(R.drawable.ic_sms_black_24dp);
+                }
+                if (mDetail.getType().equalsIgnoreCase("data")) {
+                    versionViewHolder.img.setImageResource(R.drawable.ic_datausage_usage_black_24dp);
                 }
 
                 versionViewHolder.rlMainLay.setOnClickListener(new View.OnClickListener() {
@@ -171,7 +194,7 @@ public class ActHistory extends BaseActivity {
                             db.deleteContact(listDetails.get(i).getId());
                             listDetails.remove(i);
                             listAdapter.notifyDataSetChanged();
-                        }catch (Exception e){
+                        } catch (Exception e) {
                             e.printStackTrace();
                         }
                     }
@@ -194,7 +217,7 @@ public class ActHistory extends BaseActivity {
             TextView tvtype, tvdetail;
 
             RelativeLayout rlMainLay;
-            ImageView img,ivDelete;
+            ImageView img, ivDelete;
 
 
             public VersionViewHolder(View itemView) {
@@ -206,7 +229,7 @@ public class ActHistory extends BaseActivity {
                 img = (ImageView) itemView.findViewById(R.id.img);
                 tvtype = (TextView) itemView.findViewById(R.id.tvtype);
                 tvdetail = (TextView) itemView.findViewById(R.id.tvdetail);
-                ivDelete=(ImageView)itemView.findViewById(R.id.iv_delete);
+                ivDelete = (ImageView) itemView.findViewById(R.id.iv_delete);
 
             }
 
@@ -222,30 +245,30 @@ public class ActHistory extends BaseActivity {
             materialRefreshLayout.setLoadMore(false); // enable if pagination
 
             materialRefreshLayout.setMaterialRefreshListener(new MaterialRefreshListener() {
-                                                                 @Override
-                                                                 public void onRefresh(final MaterialRefreshLayout materialRefreshLayout) {
-                                                                     //refreshing...
+                @Override
+                public void onRefresh(final MaterialRefreshLayout materialRefreshLayout) {
+                    //refreshing...
 
-                                                                     getScannerHistory();
+                    getScannerHistory();
 
-                                                                     // refresh complete
-                                                                     materialRefreshLayout.finishRefresh();
-
-// load more refresh complete
-                                                                     materialRefreshLayout.finishRefreshLoadMore();
-                                                                 }
-
-                                                                 @Override
-                                                                 public void onRefreshLoadMore(MaterialRefreshLayout materialRefreshLayout) {
-                                                                     //load more refreshing...
-
-                                                                     // refresh complete
-                                                                     materialRefreshLayout.finishRefresh();
+                    // refresh complete
+                    materialRefreshLayout.finishRefresh();
 
 // load more refresh complete
-                                                                     materialRefreshLayout.finishRefreshLoadMore();
-                                                                 }
-                                                             });
+                    materialRefreshLayout.finishRefreshLoadMore();
+                }
+
+                @Override
+                public void onRefreshLoadMore(MaterialRefreshLayout materialRefreshLayout) {
+                    //load more refreshing...
+
+                    // refresh complete
+                    materialRefreshLayout.finishRefresh();
+
+// load more refresh complete
+                    materialRefreshLayout.finishRefreshLoadMore();
+                }
+            });
 
             LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
             recyclerView.setLayoutManager(linearLayoutManager);
@@ -279,7 +302,7 @@ public class ActHistory extends BaseActivity {
                 Log.i("Reading : ", log);
             }
 
-            if(listDetails!= null){
+            if (listDetails != null) {
                 setAdapterData();
             }
         } catch (Exception e) {

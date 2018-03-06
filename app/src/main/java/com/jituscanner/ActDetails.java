@@ -50,7 +50,8 @@ public class ActDetails extends BaseActivity {
 
         ViewGroup.inflate(this, R.layout.activity_act_details, rlBaseMain);
         ButterKnife.bind(this);
-
+        dial.setVisibility(View.GONE);
+        btn_addContacts.setVisibility(View.GONE);
 
         Bundle b = getIntent().getExtras();
         if (b != null) {
@@ -63,6 +64,23 @@ public class ActDetails extends BaseActivity {
             if (details.getType().equalsIgnoreCase("contact")) {
                 tv_detail.setText(details.getName() + "\n" + details.getCell() + "\n"+ details.getPhone_number() + "\n" + details.getEmail() + "\n"
                         + details.getOrganization());
+                dial.setVisibility(View.VISIBLE);
+                btn_addContacts.setVisibility(View.VISIBLE);
+            }
+            if (details.getType().equalsIgnoreCase("sms")) {
+
+                tv_detail.setText(details.getDetail());
+                dial.setVisibility(View.VISIBLE);
+                btn_addContacts.setVisibility(View.VISIBLE);
+            }
+            if (details.getType().equalsIgnoreCase("email")) {
+                tv_detail.setText(details.getDetail());
+            }if (details.getType().equalsIgnoreCase("Phone Number")) {
+                tv_detail.setText(details.getDetail());
+                dial.setVisibility(View.VISIBLE);
+                btn_addContacts.setVisibility(View.VISIBLE);
+            }if (details.getType().equalsIgnoreCase("data")) {
+                tv_detail.setText(details.getDetail());
             }
 
         }

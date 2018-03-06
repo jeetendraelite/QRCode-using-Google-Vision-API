@@ -146,8 +146,8 @@ public class MainActivity extends BaseActivity {
                 result.post(new Runnable() {
                     @Override
                     public void run() {
-                        result.setText(barcode.displayValue
-                                + "\n \n Raw values" + barcode.rawValue);
+                        result.setText("Display Value:- "+barcode.displayValue
+                                + "\n \n Raw values:-" + barcode.rawValue);
                         
                         if(barcode.rawValue !=null)
                         {
@@ -166,9 +166,19 @@ public class MainActivity extends BaseActivity {
                         } else if (rawValues.contains("http")) {
                             details.setType("Weblink");
                             details.setDetail(barcode.displayValue);
-                        } else {
-                            details.setType("Data");
+                        } else if(rawValues.contains("SMSTO")){
+                            details.setType("SMS");
                             details.setDetail(barcode.displayValue);
+                        }else if(rawValues.contains("matmsg")){
+                            details.setType("EMAIL");
+                            details.setDetail(barcode.displayValue);
+                        }else if(rawValues.contains("tel")){
+                            Log.d("phone number",barcode.displayValue);
+                            details.setType("Phone Number");
+                            details.setDetail(barcode.displayValue);
+                        }else{
+                            details.setType("Data");
+                            details.setDetail(barcode.rawValue);
                         }
 
                         //iv_barcode_image.setImageResource();
