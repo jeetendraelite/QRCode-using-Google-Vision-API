@@ -4,6 +4,7 @@ import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Handler;
+import android.os.Parcelable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -79,8 +80,18 @@ public class MainActivity extends BaseActivity {
             // Experiment method
 
 
-    }
+                createShortCut();
 
+    }
+    public void createShortCut(){
+        Intent shortcutintent = new Intent("com.android.launcher.action.INSTALL_SHORTCUT");
+        shortcutintent.putExtra("duplicate", false);
+        shortcutintent.putExtra(Intent.EXTRA_SHORTCUT_NAME, getString(R.string.app_name));
+        Parcelable icon = Intent.ShortcutIconResource.fromContext(getApplicationContext(), R.drawable.ic_icon);
+        shortcutintent.putExtra(Intent.EXTRA_SHORTCUT_ICON_RESOURCE, icon);
+        shortcutintent.putExtra(Intent.EXTRA_SHORTCUT_INTENT, new Intent(getApplicationContext(), MainActivity.class));
+        sendBroadcast(shortcutintent);
+    }
 
 
     private void insertData(Details details) {
@@ -217,20 +228,26 @@ public class MainActivity extends BaseActivity {
                                     int MOBILE = 4;
 
 
-                                    if(contactInfo.phones.length > UNKNOWN)
+                                    details.setCell(""+contactInfo.phones[UNKNOWN].number);
+                                    details.setPhone_number(""+contactInfo.phones[WORK].number);
+
+
+
+                                  /*  if(contactInfo.phones.length > UNKNOWN)
                                         details.setPhone_number(""+contactInfo.phones[UNKNOWN].number);
 
                                     if(contactInfo.phones.length > WORK)
                                         details.setPhone_number(""+contactInfo.phones[WORK].number);
+*/
+                                   /* if(contactInfo.phones.length > HOME)
+                                        details.setPhone_number(""+contactInfo.phones[HOME].number);*/
 
-                                    if(contactInfo.phones.length > HOME)
-                                        details.setPhone_number(""+contactInfo.phones[HOME].number);
-
-                                    if(contactInfo.phones.length > MOBILE)
+                                    /*if(contactInfo.phones.length > MOBILE)
                                         details.setPhone_number(""+contactInfo.phones[MOBILE].number);
-
+*/
                                     if(contactInfo.phones.length > FAX)
                                         details.setFax(""+contactInfo.phones[FAX]);
+
 
                                 }
 

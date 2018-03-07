@@ -123,13 +123,14 @@ public class ActDetails extends BaseActivity {
                 //String callaNumber=details.getCell().trim();
                 String callaNumber = "";
 
-                if (details.getPhone_number() != null && details.getPhone_number().length() > 1) {
-                    callaNumber = details.getPhone_number();
-                    Log.d("phone Number", details.getPhone_number());
-                }
+
                 if (details.getCell() != null && details.getCell().length() > 1) {
                     callaNumber = details.getCell();
                     Log.d("cell Number", details.getCell());
+                }
+                else if (details.getPhone_number() != null && details.getPhone_number().length() > 1) {
+                    callaNumber = details.getPhone_number();
+                    Log.d("phone Number", details.getPhone_number());
                 }
                 callIntent.setData(Uri.parse("tel:" + callaNumber));
                 // callIntent.setData(Uri.parse("tel:91-000-000-0000")); // this is working
@@ -192,25 +193,25 @@ public class ActDetails extends BaseActivity {
         }
 
         //------------------------------------------------------ Mobile Number
-        if (details.getPhone_number() != null) {
+        if (details.getCell() != null) {
             ops.add(ContentProviderOperation.
                     newInsert(ContactsContract.Data.CONTENT_URI)
                     .withValueBackReference(ContactsContract.Data.RAW_CONTACT_ID, 0)
                     .withValue(ContactsContract.Data.MIMETYPE,
                             ContactsContract.CommonDataKinds.Phone.CONTENT_ITEM_TYPE)
-                    .withValue(ContactsContract.CommonDataKinds.Phone.NUMBER, details.getPhone_number())
+                    .withValue(ContactsContract.CommonDataKinds.Phone.NUMBER, details.getCell())
                     .withValue(ContactsContract.CommonDataKinds.Phone.TYPE,
                             ContactsContract.CommonDataKinds.Phone.TYPE_MOBILE)
                     .build());
         }
 
         //------------------------------------------------------ Home Numbers
-        if (details.getCell() != null) {
+        if (details.getPhone_number() != null) {
             ops.add(ContentProviderOperation.newInsert(ContactsContract.Data.CONTENT_URI)
                     .withValueBackReference(ContactsContract.Data.RAW_CONTACT_ID, 0)
                     .withValue(ContactsContract.Data.MIMETYPE,
                             ContactsContract.CommonDataKinds.Phone.CONTENT_ITEM_TYPE)
-                    .withValue(ContactsContract.CommonDataKinds.Phone.NUMBER, details.getCell())
+                    .withValue(ContactsContract.CommonDataKinds.Phone.NUMBER, details.getPhone_number())
                     .withValue(ContactsContract.CommonDataKinds.Phone.TYPE,
                             ContactsContract.CommonDataKinds.Phone.TYPE_HOME)
                     .build());
