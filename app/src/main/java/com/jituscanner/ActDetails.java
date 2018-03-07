@@ -44,8 +44,12 @@ public class ActDetails extends BaseActivity {
 
     @BindView(R.id.dial)
     ImageView dial;
+
     @BindView(R.id.btn_sendemail)
     ImageView btn_sendemail;
+
+  @BindView(R.id.btn_showmap)
+    ImageView btn_showmap;
 
     @BindView(R.id.tv_current_time)
     TextView tv_current_time;
@@ -80,6 +84,16 @@ public class ActDetails extends BaseActivity {
             //tv_detail.setText(details.getName()+"\n"+details.getCell()+"\n"+details.getEmail());
             tv_current_time.setText(details.getTime());
 
+            btn_showmap.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Uri mapUri = Uri.parse("geo:0,0?q=" + Uri.encode(details.getAddress()));
+                    Intent mapIntent = new Intent(Intent.ACTION_VIEW, mapUri);
+                    mapIntent.setPackage("com.google.android.apps.maps");
+                    startActivity(mapIntent);
+                }
+            });
+
             if (details.getType().equalsIgnoreCase("weblink")) {
                 tv_detail.setText(details.getDetail());
                 tv_type_detail.setText("Weblink");
@@ -88,7 +102,7 @@ public class ActDetails extends BaseActivity {
             }
             if (details.getType().equalsIgnoreCase("contact")) {
                 tv_detail.setText(details.getName() + "\n" + details.getCell() + "\n" + details.getPhone_number() + "\n" + details.getEmail() + "\n"
-                        + details.getOrganization());
+                        + details.getOrganization()+"\n"+details.getAddress());
                 tv_type_detail.setText("Contact");
                 // dial.setVisibility(View.VISIBLE);
                 //  btn_addContacts.setVisibility(View.VISIBLE);
