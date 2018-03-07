@@ -29,14 +29,15 @@ import java.util.Date;
 import java.util.List;
 
 public class MainActivity extends BaseActivity {
-    Button scanbtn,btn_delete;
+    Button scanbtn, btn_delete;
     TextView result, phone;
     ImageView iv_barcode_image;
     public static final int REQUEST_CODE = 100;
     public static final int PERMISSION_REQUEST = 200;
     DatabaseHandler db;
-    
+
     String rawValues = "";
+    String displayValues = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,7 +48,7 @@ public class MainActivity extends BaseActivity {
 
 
         scanbtn = (Button) findViewById(R.id.scanbtn);
-       // btn_delete = (Button) findViewById(R.id.btn_delete);
+        // btn_delete = (Button) findViewById(R.id.btn_delete);
         result = (TextView) findViewById(R.id.result);
         iv_barcode_image = (ImageView) findViewById(R.id.iv_barcode_image);
 
@@ -77,21 +78,13 @@ public class MainActivity extends BaseActivity {
         });
 
 
-            // Experiment method
+        // Experiment method
 
 
-                createShortCut();
+
 
     }
-    public void createShortCut(){
-        Intent shortcutintent = new Intent("com.android.launcher.action.INSTALL_SHORTCUT");
-        shortcutintent.putExtra("duplicate", false);
-        shortcutintent.putExtra(Intent.EXTRA_SHORTCUT_NAME, getString(R.string.app_name));
-        Parcelable icon = Intent.ShortcutIconResource.fromContext(getApplicationContext(), R.drawable.ic_icon);
-        shortcutintent.putExtra(Intent.EXTRA_SHORTCUT_ICON_RESOURCE, icon);
-        shortcutintent.putExtra(Intent.EXTRA_SHORTCUT_INTENT, new Intent(getApplicationContext(), MainActivity.class));
-        sendBroadcast(shortcutintent);
-    }
+
 
 
     private void insertData(Details details) {
@@ -104,6 +97,7 @@ public class MainActivity extends BaseActivity {
             e.printStackTrace();
         }
     }
+
     private void DeleteData(Details details) {
         try {
             Log.d("Delete: ", "Deleting ..");
@@ -139,11 +133,9 @@ public class MainActivity extends BaseActivity {
                                 "address: " + cn.getAddress() +
                                 "organization: " + cn.getOrganization() +
                                 "cell: " + cn.getCell() +
-                                "URL: " + cn.getURL()+
-                                "SMSMESSAGE: " + cn.getSMSMESSAGE()+
-                                "SMSPHONENO: " +cn.getSMSPHONENO()
-
-                        ;
+                                "URL: " + cn.getURL() +
+                                "SMSMESSAGE: " + cn.getSMSMESSAGE() +
+                                "SMSPHONENO: " + cn.getSMSPHONENO();
 
                 Log.i("Reading : ", log);
             }
@@ -161,18 +153,20 @@ public class MainActivity extends BaseActivity {
                 result.post(new Runnable() {
                     @Override
                     public void run() {
-                        result.setText("Display Value:- "+barcode.displayValue
+                        result.setText("Display Value:- " + barcode.displayValue
                                 + "\n \n Raw values:-" + barcode.rawValue);
-                        
-                        if(barcode.rawValue !=null)
-                        {
+
+                        if (barcode.rawValue != null) {
                             rawValues = barcode.rawValue;
+                        }
+                        if (barcode.displayValue != null) {
+                            displayValues = barcode.displayValue;
                         }
 
 
                         final Details details = new Details("", "", "", "",
                                 "", "", "", "",
-                                "", "", "", "","","");
+                                "", "", "", "", "", "");
 
 
                         if (rawValues.contains("VCARD")) {
@@ -181,17 +175,17 @@ public class MainActivity extends BaseActivity {
                         } else if (rawValues.contains("http")) {
                             details.setType("Weblink");
                             details.setDetail(barcode.displayValue);
-                        } else if(rawValues.contains("SMSTO")){
+                        } else if (rawValues.contains("SMSTO")) {
                             details.setType("SMS");
                             details.setDetail(rawValues);
-                        }else if(rawValues.contains("MATMSG")){
+                        } else if (rawValues.contains("MATMSG")) {
                             details.setType("EMAIL");
                             details.setDetail(rawValues);
-                        }else if(rawValues.contains("tel")){
-                            Log.d("phone number",barcode.displayValue);
+                        } else if (rawValues.contains("tel")) {
+                            Log.d("phone number", barcode.displayValue);
                             details.setType("Phone Number");
                             details.setDetail(barcode.displayValue);
-                        }else{
+                        } else {
                             details.setType("Data");
                             details.setDetail(barcode.rawValue);
                         }
@@ -208,18 +202,14 @@ public class MainActivity extends BaseActivity {
 
 // for the contact detail
 
-                        if(barcode.contactInfo !=null)
-                        {
+                        if (barcode.contactInfo != null) {
                             Barcode.ContactInfo contactInfo = barcode.contactInfo;
-                            if (contactInfo != null)
-                            {
+                            if (contactInfo != null) {
 
-                                if(contactInfo.name !=null)
-                                {
-                                    details.setName(contactInfo.name.first + " "+ contactInfo.name.last);
+                                if (contactInfo.name != null) {
+                                    details.setName(contactInfo.name.first + " " + contactInfo.name.last);
                                 }
-                                if(contactInfo.phones !=null)
-                                {
+                                if (contactInfo.phones != null) {
 
                                     int UNKNOWN = 0;
                                     int WORK = 1;
@@ -228,8 +218,8 @@ public class MainActivity extends BaseActivity {
                                     int MOBILE = 4;
 
 
-                                    details.setCell(""+contactInfo.phones[UNKNOWN].number);
-                                    details.setPhone_number(""+contactInfo.phones[WORK].number);
+                                    details.setCell("" + contactInfo.phones[UNKNOWN].number);
+                                    details.setPhone_number("" + contactInfo.phones[WORK].number);
 
 
 
@@ -245,52 +235,48 @@ public class MainActivity extends BaseActivity {
                                     /*if(contactInfo.phones.length > MOBILE)
                                         details.setPhone_number(""+contactInfo.phones[MOBILE].number);
 */
-                                    if(contactInfo.phones.length > FAX)
-                                        details.setFax(""+contactInfo.phones[FAX]);
+                                    if (contactInfo.phones.length > FAX)
+                                        details.setFax("" + contactInfo.phones[FAX]);
 
 
                                 }
 
-                                if(contactInfo.addresses !=null)
-                                {
+                                if (contactInfo.addresses != null) {
                                     int UNKNOWN = 0;
                                     int WORK = 1;
                                     int HOME = 2;
 
-                                    if(contactInfo.addresses.length > UNKNOWN && contactInfo.addresses[UNKNOWN].addressLines.length > 0)
-                                        details.setAddress(""+contactInfo.addresses[UNKNOWN].addressLines[0].toString());
+                                    if (contactInfo.addresses.length > UNKNOWN && contactInfo.addresses[UNKNOWN].addressLines.length > 0)
+                                        details.setAddress("" + contactInfo.addresses[UNKNOWN].addressLines[0].toString());
 
-                                    if(contactInfo.addresses.length > WORK && contactInfo.addresses[WORK].addressLines.length > 0)
-                                        details.setAddress(""+contactInfo.addresses[WORK].addressLines[0].toString());
+                                    if (contactInfo.addresses.length > WORK && contactInfo.addresses[WORK].addressLines.length > 0)
+                                        details.setAddress("" + contactInfo.addresses[WORK].addressLines[0].toString());
 
-                                    if(contactInfo.addresses.length > HOME && contactInfo.addresses[HOME].addressLines.length > 0)
-                                        details.setAddress(""+contactInfo.addresses[HOME].addressLines[0].toString());
+                                    if (contactInfo.addresses.length > HOME && contactInfo.addresses[HOME].addressLines.length > 0)
+                                        details.setAddress("" + contactInfo.addresses[HOME].addressLines[0].toString());
                                 }
 
-                                if(contactInfo.emails !=null)
-                                {
+                                if (contactInfo.emails != null) {
                                     int UNKNOWN = 0;
                                     int WORK = 1;
                                     int HOME = 2;
 
-                                    if(contactInfo.emails.length > UNKNOWN)
-                                        details.setEmail(""+contactInfo.emails[UNKNOWN].address.toString());
+                                    if (contactInfo.emails.length > UNKNOWN)
+                                        details.setEmail("" + contactInfo.emails[UNKNOWN].address.toString());
 
-                                    if(contactInfo.emails.length > WORK)
-                                        details.setEmail(""+contactInfo.emails[WORK].address.toString());
+                                    if (contactInfo.emails.length > WORK)
+                                        details.setEmail("" + contactInfo.emails[WORK].address.toString());
 
-                                    if(contactInfo.emails.length > HOME)
-                                        details.setEmail(""+contactInfo.emails[HOME].address.toString());
+                                    if (contactInfo.emails.length > HOME)
+                                        details.setEmail("" + contactInfo.emails[HOME].address.toString());
                                 }
 
-                                if(contactInfo.organization !=null)
-                                {
+                                if (contactInfo.organization != null) {
                                     details.setOrganization(contactInfo.organization);
                                 }
-                                if(contactInfo.urls !=null)
-                                {
-                                    if(contactInfo.urls.length > 0)
-                                     details.setURL(contactInfo.urls[0]);
+                                if (contactInfo.urls != null) {
+                                    if (contactInfo.urls.length > 0)
+                                        details.setURL(contactInfo.urls[0]);
 
                                    /* if(contactInfo.urls.length > 1)
                                      details.setURL(contactInfo.urls[1]);*/
@@ -299,22 +285,22 @@ public class MainActivity extends BaseActivity {
                             }
                         }
 
-                        if(barcode.sms != null){
+                        if (barcode.sms != null) {
                             Barcode.Sms sms = barcode.sms;
-                            if(barcode.sms!=null){
+                            if (barcode.sms != null) {
                                 details.setSMSMESSAGE(sms.message);
                                 details.setSMSPHONENO(sms.phoneNumber);
                             }
                         }
-                        if(barcode.email != null){
+                        if (barcode.email != null) {
                             Barcode.Email email = barcode.email;
-                                details.setEMAIL_TO(email.address);
-                                details.setEMAIL_SUB(email.subject);
-                                details.setEMAIL_BODY(email.body);
+                            details.setEMAIL_TO(email.address);
+                            details.setEMAIL_SUB(email.subject);
+                            details.setEMAIL_BODY(email.body);
 
                         }
-                        
-                      // DeleteData(details);
+
+                        // DeleteData(details);
                         insertData(details);
 
                         // insert to table

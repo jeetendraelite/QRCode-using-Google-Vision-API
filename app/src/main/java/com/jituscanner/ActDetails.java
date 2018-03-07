@@ -15,6 +15,7 @@ import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -33,17 +34,27 @@ public class ActDetails extends BaseActivity {
     TextView tv_detail;
 
     @BindView(R.id.btn_addContacts)
-    Button btn_addContacts;
+    ImageView btn_addContacts;
 
     @BindView(R.id.btn_sendsms)
-    Button btn_sendsms;
+    ImageView btn_sendsms;
+
+    @BindView(R.id.iv_type)
+    ImageView iv_type;
 
     @BindView(R.id.dial)
-    Button dial;
+    ImageView dial;
     @BindView(R.id.btn_sendemail)
-    Button btn_sendemail;
+    ImageView btn_sendemail;
+
+    @BindView(R.id.tv_current_time)
+    TextView tv_current_time;
+
+    @BindView(R.id.tv_type_detail)
+    TextView tv_type_detail;
 
     Details details = null;
+
 
     private static final int MAKE_CALL_PERMISSION_REQUEST_CODE = 1;
 
@@ -56,41 +67,59 @@ public class ActDetails extends BaseActivity {
 
         ViewGroup.inflate(this, R.layout.activity_act_details, rlBaseMain);
         ButterKnife.bind(this);
-        dial.setVisibility(View.GONE);
-        btn_addContacts.setVisibility(View.GONE);
+        // dial.setVisibility(View.GONE);
+       /* btn_addContacts.setVisibility(View.GONE);
         btn_sendsms.setVisibility(View.GONE);
         btn_sendemail.setVisibility(View.GONE);
+
+*/
 
         Bundle b = getIntent().getExtras();
         if (b != null) {
             details = (Details) getIntent().getSerializableExtra("ActHistory");
             //tv_detail.setText(details.getName()+"\n"+details.getCell()+"\n"+details.getEmail());
+            tv_current_time.setText(details.getTime());
 
             if (details.getType().equalsIgnoreCase("weblink")) {
                 tv_detail.setText(details.getDetail());
+                tv_type_detail.setText("Weblink");
+                iv_type.setImageResource(R.drawable.ic_weblink_black_24dp);
+
             }
             if (details.getType().equalsIgnoreCase("contact")) {
                 tv_detail.setText(details.getName() + "\n" + details.getCell() + "\n" + details.getPhone_number() + "\n" + details.getEmail() + "\n"
                         + details.getOrganization());
-                dial.setVisibility(View.VISIBLE);
-                btn_addContacts.setVisibility(View.VISIBLE);
+                tv_type_detail.setText("Contact");
+                // dial.setVisibility(View.VISIBLE);
+                //  btn_addContacts.setVisibility(View.VISIBLE);
             }
             if (details.getType().equalsIgnoreCase("sms")) {
 
-                tv_detail.setText(details.getDetail());
-                btn_sendsms.setVisibility(View.VISIBLE);
+                tv_type_detail.setText("SMS");
+                // tv_detail.setText(details.getDetail());
+                //  btn_sendsms.setVisibility(View.VISIBLE);
+                iv_type.setImageResource(R.drawable.ic_sms_black_24dp);
+                tv_detail.setText("Sending SMS number: " + details.getSMSPHONENO() + "\n SMS BODY :" + details.getSMSMESSAGE());
             }
             if (details.getType().equalsIgnoreCase("email")) {
-                tv_detail.setText(details.getDetail());
-                btn_sendemail.setVisibility(View.VISIBLE);
+                // tv_detail.setText(details.getDetail());
+                tv_type_detail.setText("Email");
+                tv_detail.setText("Email to :" + details.getEMAIL_TO() + "\n Email Subject:" + details.getEMAIL_SUB() +
+                        "\nEmail Body:" + details.getEMAIL_BODY());
+                iv_type.setImageResource(R.drawable.ic_email_black_24dp);
+                //  btn_sendemail.setVisibility(View.VISIBLE);
             }
             if (details.getType().equalsIgnoreCase("Phone Number")) {
                 tv_detail.setText(details.getDetail());
-                dial.setVisibility(View.VISIBLE);
-                btn_addContacts.setVisibility(View.VISIBLE);
+                iv_type.setImageResource(R.drawable.ic_phone_black_24dp);
+                tv_type_detail.setText("Phone Number");
+                //  dial.setVisibility(View.VISIBLE);
+                //  btn_addContacts.setVisibility(View.VISIBLE);
             }
             if (details.getType().equalsIgnoreCase("data")) {
                 tv_detail.setText(details.getDetail());
+                tv_type_detail.setText("Data");
+                iv_type.setImageResource(R.drawable.ic_datausage_usage_black_24dp);
             }
 
         }
@@ -127,8 +156,7 @@ public class ActDetails extends BaseActivity {
                 if (details.getCell() != null && details.getCell().length() > 1) {
                     callaNumber = details.getCell();
                     Log.d("cell Number", details.getCell());
-                }
-                else if (details.getPhone_number() != null && details.getPhone_number().length() > 1) {
+                } else if (details.getPhone_number() != null && details.getPhone_number().length() > 1) {
                     callaNumber = details.getPhone_number();
                     Log.d("phone Number", details.getPhone_number());
                 }
@@ -242,10 +270,11 @@ public class ActDetails extends BaseActivity {
         }
 
         ActivityCompat.requestPermissions(ActDetails.this,
-                new String[]{Manifest.permission.WRITE_CONTACTS,Manifest.permission.CALL_PHONE},
+                new String[]{Manifest.permission.WRITE_CONTACTS, Manifest.permission.CALL_PHONE},
                 1);
 
     }
+
     @Override
     public void onRequestPermissionsResult(int requestCode,
                                            String permissions[], int[] grantResults) {
