@@ -46,17 +46,24 @@ public class ActDetails extends BaseActivity {
     @BindView(R.id.dial)
     ImageView dial;
 
+
     @BindView(R.id.btn_sendemail)
     ImageView btn_sendemail;
 
     @BindView(R.id.btn_showmap)
     ImageView btn_showmap;
 
+    @BindView(R.id.btn_openLink)
+    ImageView btn_openLink;
+
     @BindView(R.id.tv_current_time)
     TextView tv_current_time;
 
     @BindView(R.id.llContactScanAction)
     LinearLayout llContactScanAction;
+
+    @BindView(R.id.llContactWebLinkAction)
+    LinearLayout llContactWebLinkAction;
 
     @BindView(R.id.llContactSMSAction)
     LinearLayout llContactSMSAction;
@@ -72,6 +79,10 @@ public class ActDetails extends BaseActivity {
 
     @BindView(R.id.llShareSms)
     LinearLayout llShareSms;
+
+
+    @BindView(R.id.llShareWebLink)
+    LinearLayout llShareWebLink;
 
 
     @BindView(R.id.llContactEmailAction)
@@ -98,6 +109,7 @@ public class ActDetails extends BaseActivity {
         llContactEmailAction.setVisibility(View.GONE);
         llContactSMSAction.setVisibility(View.GONE);
         llContactScanAction.setVisibility(View.GONE);
+        llContactWebLinkAction.setVisibility(View.GONE);
 
         // dial.setVisibility(View.GONE);
        /* btn_addContacts.setVisibility(View.GONE);
@@ -112,22 +124,36 @@ public class ActDetails extends BaseActivity {
             //tv_detail.setText(details.getName()+"\n"+details.getCell()+"\n"+details.getEmail());
             tv_current_time.setText(details.getTime());
 
-            btn_showmap.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Uri mapUri = Uri.parse("geo:0,0?q=" + Uri.encode(details.getAddress()));
-                    Intent mapIntent = new Intent(Intent.ACTION_VIEW, mapUri);
-                    mapIntent.setPackage("com.google.android.apps.maps");
-                    startActivity(mapIntent);
-                }
-            });
+
 
             if (details.getType().equalsIgnoreCase("weblink")) {
+
+                llContactWebLinkAction.setVisibility(View.VISIBLE);
                 tv_detail.setText(details.getDetail());
                 tv_type_detail.setText("Weblink");
                 iv_type.setImageResource(R.drawable.ic_weblink_black_24dp);
-                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(details.getDetail()));
-                startActivity(intent);
+
+
+                btn_openLink.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(details.getDetail()));
+                        startActivity(intent);
+                    }
+                });
+
+                llShareWebLink.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        String shareBody = tv_detail.getText().toString();
+                        Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
+                        sharingIntent.setType("text/plain");
+                        ;
+                        // sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "Subject Here");
+                        sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, shareBody);
+                        startActivity(Intent.createChooser(sharingIntent, "Share via"));
+                    }
+                });
 
             }
             if (details.getType().equalsIgnoreCase("contact")) {
@@ -147,6 +173,16 @@ public class ActDetails extends BaseActivity {
                         // sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "Subject Here");
                         sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, shareBody);
                         startActivity(Intent.createChooser(sharingIntent, "Share via"));
+                    }
+                });
+
+                btn_showmap.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Uri mapUri = Uri.parse("geo:0,0?q=" + Uri.encode(details.getAddress()));
+                        Intent mapIntent = new Intent(Intent.ACTION_VIEW, mapUri);
+                        mapIntent.setPackage("com.google.android.apps.maps");
+                        startActivity(mapIntent);
                     }
                 });
 
