@@ -7,6 +7,19 @@
     android:orientation="vertical"
     tools:context="com.jituscanner.ActDetails">
 
+
+    <android.support.v4.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+
+            android:orientation="vertical"
+            >
+
+
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -26,7 +39,12 @@
             android:layout_marginLeft="10dp"
             android:layout_toRightOf="@+id/iv_type"
             android:text="Type here"
-            android:textStyle="bold" />
+            android:fontFamily="amiko_semibold"
+
+            android:textColor="@color/black3"
+
+            android:textSize="@dimen/txt_18s"
+            />
 
         <TextView
             android:id="@+id/tv_current_time"
@@ -35,7 +53,13 @@
             android:layout_below="@+id/tv_type_detail"
             android:layout_marginLeft="10dp"
             android:layout_toRightOf="@+id/iv_type"
-            android:text="Time  here" />
+            android:text="Time  here"
+
+
+            android:textSize="@dimen/txt_14s"
+            android:textColor="@color/black9"
+            android:fontFamily="@font/cagliostro"
+            />
 
     </RelativeLayout>
 
@@ -46,8 +70,13 @@
         android:layout_marginTop="5dp"
         android:gravity="center_horizontal"
         android:padding="5dp"
-        android:text="Details - "
-        android:textSize="20sp" />
+
+        android:text="Text Detail"
+        android:textSize="@dimen/txt_18s"
+        android:textColor="@color/black9"
+        android:fontFamily="@font/cagliostro"
+
+        />
 
     <LinearLayout
         android:id="@+id/llContactScanAction"
@@ -72,13 +101,18 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:src="@drawable/addcontacts" />
+                android:src="@drawable/ic_person_add_black_48dp" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_gravity="center"
                 android:layout_height="wrap_content"
-                android:text="Add to Contacts" />
+                android:text="Add to Contacts"
+
+                android:textSize="@dimen/txt_14s"
+                android:textColor="@color/black9"
+                android:fontFamily="@font/cagliostro"
+                />
         </LinearLayout>
 
         <LinearLayout
@@ -94,13 +128,18 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:src="@drawable/call" />
+                android:src="@drawable/ic_call_black_48dp" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_gravity="center"
                 android:layout_height="wrap_content"
-                android:text="Call a number" />
+                android:text="Call a number"
+
+                android:textSize="@dimen/txt_14s"
+                android:textColor="@color/black9"
+                android:fontFamily="@font/cagliostro"
+                />
 
 
         </LinearLayout>
@@ -118,13 +157,20 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:src="@drawable/showmaps" />
+                android:src="@drawable/ic_location_on_black_48dp" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:text="Show Map" />
+                android:text="Show Map"
+
+
+                android:textSize="@dimen/txt_14s"
+                android:textColor="@color/black9"
+                android:fontFamily="@font/cagliostro"
+
+                />
 
         </LinearLayout>
         <LinearLayout
@@ -144,13 +190,20 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:src="@drawable/ic_share" />
+                android:src="@drawable/ic_share_black_48dp" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:text="Share" />
+                android:text="Share"
+
+
+                android:textSize="@dimen/txt_14s"
+                android:textColor="@color/black9"
+                android:fontFamily="@font/cagliostro"
+
+                />
 
         </LinearLayout>
 
@@ -178,13 +231,20 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:src="@drawable/sms" />
+                android:src="@drawable/ic_sms_black_48dp" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:text="Send SMS" />
+                android:text="Send SMS"
+
+
+                android:textSize="@dimen/txt_14s"
+                android:textColor="@color/black9"
+                android:fontFamily="@font/cagliostro"
+
+                />
         </LinearLayout>
 
         <LinearLayout
@@ -200,13 +260,19 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:src="@drawable/ic_share" />
+                android:src="@drawable/ic_share_black_48dp" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:text="Share" />
+                android:text="Share"
+
+
+                android:textSize="@dimen/txt_14s"
+                android:textColor="@color/black9"
+                android:fontFamily="@font/cagliostro"
+                />
 
         </LinearLayout>
     </LinearLayout>
@@ -233,13 +299,19 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:src="@drawable/sendemail" />
+                android:src="@drawable/ic_email_black_48dp" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:text="Send Email" />
+                android:text="Send Email"
+
+
+                android:textSize="@dimen/txt_14s"
+                android:textColor="@color/black9"
+                android:fontFamily="@font/cagliostro"
+                />
 
         </LinearLayout>
         <LinearLayout
@@ -255,13 +327,19 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:src="@drawable/ic_share" />
+                android:src="@drawable/ic_share_black_48dp" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:text="Share" />
+                android:text="Share"
+
+                android:textSize="@dimen/txt_14s"
+                android:textColor="@color/black9"
+                android:fontFamily="@font/cagliostro"
+
+                />
 
         </LinearLayout>
     </LinearLayout>
@@ -287,13 +365,20 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:src="@drawable/open" />
+                android:src="@drawable/ic_open_in_browser_black_48dp" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:text="Open" />
+                android:text="Open"
+
+
+                android:textSize="@dimen/txt_14s"
+                android:textColor="@color/black9"
+                android:fontFamily="@font/cagliostro"
+
+                />
 
         </LinearLayout>
 
@@ -311,15 +396,24 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:src="@drawable/ic_share" />
+                android:src="@drawable/ic_share_black_48dp" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:text="Share" />
+                android:text="Share"
+
+                android:textSize="@dimen/txt_14s"
+                android:textColor="@color/black9"
+                android:fontFamily="@font/cagliostro"
+
+                />
 
         </LinearLayout>
     </LinearLayout>
 
+        </LinearLayout>
+
+    </android.support.v4.widget.NestedScrollView>
     </LinearLayout>

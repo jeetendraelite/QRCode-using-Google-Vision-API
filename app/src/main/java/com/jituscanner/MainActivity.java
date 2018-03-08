@@ -153,9 +153,9 @@ public class MainActivity extends BaseActivity {
                 result.post(new Runnable() {
                     @Override
                     public void run() {
-                        result.setText("Display Value:- " + barcode.displayValue
+                       /* result.setText("Display Value:- " + barcode.displayValue
                                 + "\n \n Raw values:-" + barcode.rawValue);
-
+*/
                         if (barcode.rawValue != null) {
                             rawValues = barcode.rawValue;
                         }
@@ -198,6 +198,8 @@ public class MainActivity extends BaseActivity {
                         String formattedDate = df.format(c.getTime());
 
                         details.setTime(formattedDate);
+
+                      //  startActivity(new Intent(MainActivity.this,ActDetails.class));
 
 
 // for the contact detail
@@ -303,6 +305,10 @@ public class MainActivity extends BaseActivity {
                         // DeleteData(details);
                         insertData(details);
 
+                        Intent intent = new Intent(MainActivity.this, ActDetails.class);
+
+                        intent.putExtra("ActHistory", details);
+                        startActivity(intent);
                         // insert to table
                         // phone.setText(barcode.phone);
                     }

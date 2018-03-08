@@ -5,16 +5,13 @@ import android.content.ContentProviderOperation;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
+import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -22,12 +19,10 @@ import android.widget.Toast;
 
 import com.jituscanner.utils.Details;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import de.cketti.mailto.EmailIntentBuilder;
 
 public class ActDetails extends BaseActivity {
 
@@ -129,7 +124,7 @@ public class ActDetails extends BaseActivity {
             if (details.getType().equalsIgnoreCase("weblink")) {
 
                 llContactWebLinkAction.setVisibility(View.VISIBLE);
-                tv_detail.setText(details.getDetail());
+                tv_detail.setText("Link : "+details.getDetail());
                 tv_type_detail.setText("Weblink");
                 iv_type.setImageResource(R.drawable.ic_weblink_black_24dp);
 
@@ -157,8 +152,44 @@ public class ActDetails extends BaseActivity {
 
             }
             if (details.getType().equalsIgnoreCase("contact")) {
-                tv_detail.setText(details.getName() + "\n" + details.getCell() + "\n" + details.getPhone_number() + "\n" + details.getEmail() + "\n"
-                        + details.getOrganization() + "\n" + details.getAddress());
+
+                String strContactDetail = "";
+
+                if(details.getName() !=null && details.getName().length() > 0)
+                {
+                    strContactDetail = strContactDetail + "Name : "+details.getName() + "\n";
+                }
+
+                if(details.getCell() !=null && details.getCell().length() > 0)
+                {
+                    strContactDetail = strContactDetail + "Cell No : "+details.getCell() + "\n";
+                }
+                if(details.getPhone_number() !=null && details.getPhone_number().length() > 0)
+                {
+                    strContactDetail = strContactDetail + "Mobile No : "+details.getPhone_number() + "\n";
+                }
+                if(details.getEmail() !=null && details.getEmail().length() > 0)
+                {
+                    strContactDetail = strContactDetail + "Email : "+details.getEmail() + "\n";
+                }
+                if(details.getOrganization() !=null && details.getOrganization().length() > 0)
+                {
+                    strContactDetail = strContactDetail + "Organization : "+details.getOrganization() + "\n";
+                }
+                if(details.getAddress() !=null && details.getAddress().length() > 0)
+                {
+                    strContactDetail = strContactDetail + "Address : "+details.getAddress() + "\n";
+                }
+
+                tv_detail.setText(
+
+                        strContactDetail
+
+                );
+
+
+
+
                 tv_type_detail.setText("Contact");
 
                 llContactScanAction.setVisibility(View.VISIBLE);
@@ -194,7 +225,21 @@ public class ActDetails extends BaseActivity {
                 //  btn_sendsms.setVisibility(View.VISIBLE);
                 llContactSMSAction.setVisibility(View.VISIBLE);
                 iv_type.setImageResource(R.drawable.ic_sms_black_24dp);
-                tv_detail.setText( details.getSMSPHONENO() + "\n" + details.getSMSMESSAGE());
+
+
+                String strSmsDetail = "";
+
+                if(details.getSMSPHONENO() !=null && details.getSMSPHONENO().length() > 0)
+                {
+                    strSmsDetail = strSmsDetail + "Phone No : "+details.getSMSPHONENO() + "\n";
+                }
+                if(details.getSMSMESSAGE() !=null && details.getSMSMESSAGE().length() > 0)
+                {
+                    strSmsDetail = strSmsDetail + "Message : "+details.getSMSPHONENO() + "\n";
+                }
+
+
+                tv_detail.setText( strSmsDetail);
 
                 llShareSms.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -213,8 +258,28 @@ public class ActDetails extends BaseActivity {
                 // tv_detail.setText(details.getDetail());
                 tv_type_detail.setText("Email");
                 llContactEmailAction.setVisibility(View.VISIBLE);
-                tv_detail.setText(details.getEMAIL_TO() + "\n" + details.getEMAIL_SUB() +
-                        "\n" + details.getEMAIL_BODY());
+
+                String strEmailDetail = "";
+
+                if(details.getEMAIL_TO() !=null && details.getEMAIL_TO().length() > 0)
+                {
+                    strEmailDetail = strEmailDetail + "Email to : "+details.getEMAIL_TO() + "\n";
+                }
+                if(details.getEMAIL_SUB() !=null && details.getEMAIL_SUB().length() > 0)
+                {
+                    strEmailDetail = strEmailDetail + "Subject : "+details.getEMAIL_SUB() + "\n";
+                }
+                if(details.getEMAIL_BODY() !=null && details.getEMAIL_BODY().length() > 0)
+                {
+                    strEmailDetail = strEmailDetail + "Body : "+details.getEMAIL_BODY() + "\n";
+                }
+
+
+                tv_detail.setText( strEmailDetail);
+
+
+
+
                 iv_type.setImageResource(R.drawable.ic_email_black_24dp);
 
                 llShareEmail.setOnClickListener(new View.OnClickListener() {
@@ -231,14 +296,14 @@ public class ActDetails extends BaseActivity {
                 });
             }
             if (details.getType().equalsIgnoreCase("Phone Number")) {
-                tv_detail.setText(details.getDetail());
+                tv_detail.setText("Phone No : "+details.getDetail());
                 iv_type.setImageResource(R.drawable.ic_phone_black_24dp);
                 tv_type_detail.setText("Phone Number");
                 //  dial.setVisibility(View.VISIBLE);
                 //  btn_addContacts.setVisibility(View.VISIBLE);
             }
             if (details.getType().equalsIgnoreCase("data")) {
-                tv_detail.setText(details.getDetail());
+                tv_detail.setText("Data : "+details.getDetail());
                 tv_type_detail.setText("Data");
                 iv_type.setImageResource(R.drawable.ic_datausage_usage_black_24dp);
             }
