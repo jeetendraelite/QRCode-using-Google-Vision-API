@@ -16,6 +16,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -48,11 +49,22 @@ public class ActDetails extends BaseActivity {
     @BindView(R.id.btn_sendemail)
     ImageView btn_sendemail;
 
-  @BindView(R.id.btn_showmap)
+    @BindView(R.id.btn_showmap)
     ImageView btn_showmap;
 
     @BindView(R.id.tv_current_time)
     TextView tv_current_time;
+
+    @BindView(R.id.llContactScanAction)
+    LinearLayout llContactScanAction;
+
+    @BindView(R.id.llContactSMSAction)
+    LinearLayout llContactSMSAction;
+
+
+    @BindView(R.id.llContactEmailAction)
+    LinearLayout llContactEmailAction;
+
 
     @BindView(R.id.tv_type_detail)
     TextView tv_type_detail;
@@ -71,6 +83,10 @@ public class ActDetails extends BaseActivity {
 
         ViewGroup.inflate(this, R.layout.activity_act_details, rlBaseMain);
         ButterKnife.bind(this);
+        llContactEmailAction.setVisibility(View.GONE);
+        llContactSMSAction.setVisibility(View.GONE);
+        llContactScanAction.setVisibility(View.GONE);
+
         // dial.setVisibility(View.GONE);
        /* btn_addContacts.setVisibility(View.GONE);
         btn_sendsms.setVisibility(View.GONE);
@@ -98,12 +114,15 @@ public class ActDetails extends BaseActivity {
                 tv_detail.setText(details.getDetail());
                 tv_type_detail.setText("Weblink");
                 iv_type.setImageResource(R.drawable.ic_weblink_black_24dp);
+                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(details.getDetail()));
+                startActivity(intent);
 
             }
             if (details.getType().equalsIgnoreCase("contact")) {
                 tv_detail.setText(details.getName() + "\n" + details.getCell() + "\n" + details.getPhone_number() + "\n" + details.getEmail() + "\n"
-                        + details.getOrganization()+"\n"+details.getAddress());
+                        + details.getOrganization() + "\n" + details.getAddress());
                 tv_type_detail.setText("Contact");
+                llContactScanAction.setVisibility(View.VISIBLE);
                 // dial.setVisibility(View.VISIBLE);
                 //  btn_addContacts.setVisibility(View.VISIBLE);
             }
@@ -112,12 +131,14 @@ public class ActDetails extends BaseActivity {
                 tv_type_detail.setText("SMS");
                 // tv_detail.setText(details.getDetail());
                 //  btn_sendsms.setVisibility(View.VISIBLE);
+                llContactSMSAction.setVisibility(View.VISIBLE);
                 iv_type.setImageResource(R.drawable.ic_sms_black_24dp);
                 tv_detail.setText("Sending SMS number: " + details.getSMSPHONENO() + "\n SMS BODY :" + details.getSMSMESSAGE());
             }
             if (details.getType().equalsIgnoreCase("email")) {
                 // tv_detail.setText(details.getDetail());
                 tv_type_detail.setText("Email");
+                llContactEmailAction.setVisibility(View.VISIBLE);
                 tv_detail.setText("Email to :" + details.getEMAIL_TO() + "\n Email Subject:" + details.getEMAIL_SUB() +
                         "\nEmail Body:" + details.getEMAIL_BODY());
                 iv_type.setImageResource(R.drawable.ic_email_black_24dp);
