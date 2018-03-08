@@ -62,6 +62,18 @@ public class ActDetails extends BaseActivity {
     LinearLayout llContactSMSAction;
 
 
+    @BindView(R.id.llShareContact)
+    LinearLayout llShareContact;
+
+
+    @BindView(R.id.llShareEmail)
+    LinearLayout llShareEmail;
+
+
+    @BindView(R.id.llShareSms)
+    LinearLayout llShareSms;
+
+
     @BindView(R.id.llContactEmailAction)
     LinearLayout llContactEmailAction;
 
@@ -122,9 +134,22 @@ public class ActDetails extends BaseActivity {
                 tv_detail.setText(details.getName() + "\n" + details.getCell() + "\n" + details.getPhone_number() + "\n" + details.getEmail() + "\n"
                         + details.getOrganization() + "\n" + details.getAddress());
                 tv_type_detail.setText("Contact");
+
                 llContactScanAction.setVisibility(View.VISIBLE);
-                // dial.setVisibility(View.VISIBLE);
-                //  btn_addContacts.setVisibility(View.VISIBLE);
+
+                llShareContact.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        String shareBody = tv_detail.getText().toString();
+                        Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
+                        sharingIntent.setType("text/plain");
+                        ;
+                        // sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "Subject Here");
+                        sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, shareBody);
+                        startActivity(Intent.createChooser(sharingIntent, "Share via"));
+                    }
+                });
+
             }
             if (details.getType().equalsIgnoreCase("sms")) {
 
@@ -133,16 +158,41 @@ public class ActDetails extends BaseActivity {
                 //  btn_sendsms.setVisibility(View.VISIBLE);
                 llContactSMSAction.setVisibility(View.VISIBLE);
                 iv_type.setImageResource(R.drawable.ic_sms_black_24dp);
-                tv_detail.setText("Sending SMS number: " + details.getSMSPHONENO() + "\n SMS BODY :" + details.getSMSMESSAGE());
+                tv_detail.setText( details.getSMSPHONENO() + "\n" + details.getSMSMESSAGE());
+
+                llShareSms.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        String shareBody = tv_detail.getText().toString();
+                        Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
+                        sharingIntent.setType("text/plain");
+                        ;
+                        // sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "Subject Here");
+                        sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, shareBody);
+                        startActivity(Intent.createChooser(sharingIntent, "Share via"));
+                    }
+                });
             }
             if (details.getType().equalsIgnoreCase("email")) {
                 // tv_detail.setText(details.getDetail());
                 tv_type_detail.setText("Email");
                 llContactEmailAction.setVisibility(View.VISIBLE);
-                tv_detail.setText("Email to :" + details.getEMAIL_TO() + "\n Email Subject:" + details.getEMAIL_SUB() +
-                        "\nEmail Body:" + details.getEMAIL_BODY());
+                tv_detail.setText(details.getEMAIL_TO() + "\n" + details.getEMAIL_SUB() +
+                        "\n" + details.getEMAIL_BODY());
                 iv_type.setImageResource(R.drawable.ic_email_black_24dp);
-                //  btn_sendemail.setVisibility(View.VISIBLE);
+
+                llShareEmail.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        String shareBody = tv_detail.getText().toString();
+                        Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
+                        sharingIntent.setType("text/plain");
+                        ;
+                        // sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "Subject Here");
+                        sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, shareBody);
+                        startActivity(Intent.createChooser(sharingIntent, "Share via"));
+                    }
+                });
             }
             if (details.getType().equalsIgnoreCase("Phone Number")) {
                 tv_detail.setText(details.getDetail());
